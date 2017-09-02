@@ -4,9 +4,18 @@
   "description": "HasiCorp Vault Web UI",
   "main": "index.js",
   "scripts": {
-    "static": "webpack --env=prod",
-    "build": "webpack --env=prod",
+    "start": "node src/start-server",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "run-s clean build:client build:server",
+    "build:static": "webpack --env=prod",
+    "build:client": "webpack --config \"./webpack.config.client.js\" --colors --display-error-details",
+    "build:server": "webpack --config \"./webpack.config.server.js\" --colors --display-error-details",
+    "clean": "rm -rf dist",
+    "dev": "run-p dev:client dev:server",
+    "dev:client": "webpack-dev-server --config webpack.config.client.js --colors --progress",
+    "dev:server": "run-p watch:webpack:server nodemon:server",
+    "watch:webpack:server": "webpack --watch --config webpack.config.server.js --colors --display-error-details",
+    "nodemon:server": "LOG_LEVEL=debug PORT=8000 nodemon src/start-server.babel --watch dist/ssr/server",
     "fix": "eslint --fix --ext .jsx src/index.jsx"
   },
   "repository": {
@@ -25,6 +34,7 @@
     "babel-eslint": "7.2.3",
     "babel-loader": "7.1.2",
     "babel-plugin-transform-object-rest-spread": "6.26.0",
+    "babel-plugin-transform-runtime": "6.23.0",
     "babel-preset-env": "1.6.0",
     "babel-preset-react": "6.24.1",
     "clean-webpack-plugin": "0.1.16",
@@ -34,17 +44,23 @@
     "eslint-plugin-async-await": "0.0.0",
     "eslint-plugin-react": "7.3.0",
     "extract-text-webpack-plugin": "3.0.0",
+    "html-minifier": "3.5.3",
     "html-webpack-plugin": "2.30.1",
+    "npm-run-all": "4.1.1",
     "react": "15.6.1",
     "react-dom": "15.6.1",
     "react-hot-loader": "3.0.0-beta.7",
     "react-types": "0.1.0",
     "webpack": "3.5.5",
+    "webpack-dev-server": "2.7.1",
     "webpack-merge": "4.1.0"
   },
   "dependencies": {
     "extract-text-webpack-plugin": "3.0.0",
+    "koa": "2.3.0",
     "universal-webpack": "0.3.11",
-    "webpack-isomorphic-tools": "3.0.3"
+    "webpack-isomorphic-tools": "3.0.3",
+    "winston": "2.3.1",
+    "winston-koa2-logger": "0.0.1"
   }
 }

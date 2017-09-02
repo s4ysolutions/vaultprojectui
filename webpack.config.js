@@ -7,6 +7,7 @@ const CompressionPlugin = require("compression-webpack-plugin");
 
 const PATH_SRC = path.resolve(__dirname, "src");
 const PATH_DIST = path.resolve(__dirname, "dist");
+const PATH_DIST_ASSETS = path.resolve(PATH_DIST, "assets");
 
 const rule_babel_client_dev =
       { test: /\.jsx?$/,
@@ -50,7 +51,7 @@ const rule_babel_client_prod =
             plugins: [
               "babel-plugin-transform-runtime",
               "transform-async-to-generator",
-              "transform-object-rest-spread",
+              "transform-object-rest-spread"
             ]
           }
         }],
@@ -66,11 +67,19 @@ const rule_babel_server =
             presets: [
               ["env", {
                 modules: "commonjs",
-                targets: { "node": "current", uglify: true },
+                targets: {
+                  "node": "current",
+                  "uglify": true,
+                  "browsers": ["last 2 versions", "safari >= 7"]
+                },
                 useBuiltIns: true
               }],
+              "react"
             ],
             plugins: [
+              "transform-object-rest-spread",
+              "babel-plugin-transform-runtime",
+              "transform-async-to-generator",
               "transform-object-rest-spread"
             ]
           }
@@ -78,7 +87,7 @@ const rule_babel_server =
         include: PATH_SRC
       };
 
-const rule_eslint=
+const rule_eslint =
           { test: /\.jsx?$/,
             exclude: /node_modules/,
             use: [{
@@ -90,20 +99,20 @@ const rule_eslint=
 const base = {
 };
 
-let config=base;
+let config = base;
 
-const ENV=process.env.npm_lifecycle_event || process.env.WEBPACK_ENV || "start";
+const ENV = process.env.npm_lifecycle_event || process.env.WEBPACK_ENV || "start";
 console.log({ ENV });
 
 // Client any
-if (ENV==="dev:client" || ENV==="build:client" ){
+if (ENV === "dev:client" || ENV === "build:client" ){
   config = merge(
     config,
     {
       entry: path.join(PATH_SRC, "/index.jsx"),
       output: {
-        filename: "index.js",
-        path: PATH_DIST
+        filename: "[name].[hash].js",
+        path: PATH_DIST_ASSETS
       },
       resolve: {
         extensions: [".js", ".jsx"]
@@ -111,13 +120,13 @@ if (ENV==="dev:client" || ENV==="build:client" ){
       plugins: [
         new HtmlWebpackPlugin({
           appMountId: "reactMount",
-          template: PATH_SRC+"/index.ejs",
+          template: PATH_SRC + "/index.ejs",
           filename: "index.html",
           title: "HashiCorp Vault",
           minify: {}
         }),
         new CompressionPlugin({  
-          asset: "[path].gz[query]",
+          asset: "[file].gz",
           algorithm: "gzip",
           test: /\.js$|\.css$|\.html$/,
           threshold: 1024,
@@ -128,7 +137,7 @@ if (ENV==="dev:client" || ENV==="build:client" ){
   );
 }
 // client dev
-if (ENV==="dev:client" ){
+if (ENV === "dev:client" ){
   config = merge(
     config,
     {
@@ -139,7 +148,7 @@ if (ENV==="dev:client" ){
   );
 }
 // client production
-if (ENV==="build:client" ){
+if (ENV === "build:client" ){
   config = merge(
     config,
     {
@@ -157,7 +166,7 @@ if (ENV==="build:client" ){
 }
 
 // Server any
-if (ENV.indexOf("server")>=0  || ENV==="start"){
+if (ENV.indexOf("server") >= 0 || ENV === "start"){
   config = merge(
     config,
     {
@@ -175,7 +184,7 @@ if (ENV.indexOf("server")>=0  || ENV==="start"){
     });
 }
 // Server produciton
-if ( ENV==="build:server"  || ENV=="start"){
+if ( ENV === "build:server"  || ENV == "start"){
   config = merge(
     config,
     {
@@ -191,7 +200,7 @@ if ( ENV==="build:server"  || ENV=="start"){
     });
 }
 // Any produciton
-if (ENV==="build:client" || ENV=="build:server" || ENV=="start"){
+if (ENV === "build:client" || ENV == "build:server" || ENV == "start"){
   config = merge(
     config,
     {

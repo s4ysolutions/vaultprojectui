@@ -40,20 +40,15 @@
 
 </head>
 <body>
-<% if (htmlWebpackPlugin.options.unsupportedBrowser) { %>
-<style>.unsupported-browser {
-		display: none;
-	}</style>
-<div class="unsupported-browser">
-	Sorry, your browser is not supported. Please upgrade to
-	the latest version or switch your browser to use this site.
-	See <a href="http://outdatedbrowser.com/">outdatedbrowser.com</a>
-	for options.
-</div>
-<% } %>
 
 <% if (htmlWebpackPlugin.options.appMountId) { %>
-<div id="<%= htmlWebpackPlugin.options.appMountId %>">...</div>
+<div id="<%= htmlWebpackPlugin.options.appMountId %>">
+<% if (htmlWebpackPlugin.ssr) { %>
+<%- (htmlWebpackPlugin.ssr) %>
+<% } else { %>
+...
+<% } %>
+</div>
 <% } %>
 
 <% if (htmlWebpackPlugin.options.appMountIds && htmlWebpackPlugin.options.appMountIds.length > 0) { %>
@@ -61,7 +56,6 @@
 <div id="<%= htmlWebpackPlugin.options.appMountIds[index] %>"></div>
 <% } %>
 <% } %>
-	<script>var BUILD_MODE="<%= htmlWebpackPlugin.options.mode || 'dev' %>"</script>
 	<!--[if lt IE 9]>
 <script>
 (function(){
@@ -69,10 +63,6 @@
   window.console = window.console || {log:ef,warn:ef,error:ef,dir:ef};
 }());
 </script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv-printshiv.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-shim.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-sham.js"></script>
 <![endif]-->
 
 <% if (htmlWebpackPlugin.options.window) { %>
@@ -91,29 +81,5 @@
 <script src="<%= htmlWebpackPlugin.options.devServer %>/webpack-dev-server.js"></script>
 <% } %>
 
-<% if (htmlWebpackPlugin.options.googleAnalytics) { %>
-<script>
-	(function (i, s, o, g, r, a, m) {
-		i['GoogleAnalyticsObject'] = r;
-		i[r] = i[r] || function () {
-					(i[r].q = i[r].q || []).push(arguments)
-				}, i[r].l = 1 * new Date();
-		a = s.createElement(o),
-				m = s.getElementsByTagName(o)[0];
-		a.async = 1;
-		a.src = g;
-		m.parentNode.insertBefore(a, m)
-	})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
-
-	<% if (htmlWebpackPlugin.options.googleAnalytics.trackingId) { %>
-	ga('create', '<%= htmlWebpackPlugin.options.googleAnalytics.trackingId%>', 'auto');
-	<% } else { throw new Error("html-webpack-template requires googleAnalytics.trackingId config"); }%>
-
-	<% if (htmlWebpackPlugin.options.googleAnalytics.pageViewOnLoad) { %>
-	ga('send', 'pageview');
-	<% } %>
-</script>
-<% } %>
 </body>
 </html>

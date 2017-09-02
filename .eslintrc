@@ -21,6 +21,7 @@
 		"react","async-await"
 	],
 	"rules": {
+		"space-infix-ops": ["error"],
 		"require-await": "error",
 		"no-return-await": "error",
 		// Disable `no-console` rule

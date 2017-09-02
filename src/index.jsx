@@ -1,17 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { BrowserRouter } from "react-router-dom";
 
-console.log("index");
-const Index = ()=>
-  <div>
- Hi!
-  </div>;
-
-export default Index;
+import App from "./components/app";
 
 const render = Component => { ReactDOM.render(
-  <Component/>,
+  <BrowserRouter>
+    <Component/>
+  </BrowserRouter>,
   document.getElementById("reactMount")
 );};
 
-render(Index);
+render(App);

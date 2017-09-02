@@ -4,7 +4,7 @@
   "description": "HasiCorp Vault Web UI",
   "main": "index.js",
   "scripts": {
-    "start": "node src/start-server",
+    "start": "node src/start-server.babel",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "run-s clean build:client build:server",
     "build:static": "webpack --env=prod",
@@ -15,7 +15,7 @@
     "dev:client": "webpack-dev-server --config webpack.config.client.js --colors --progress",
     "dev:server": "run-p watch:webpack:server nodemon:server",
     "watch:webpack:server": "webpack --watch --config webpack.config.server.js --colors --display-error-details",
-    "nodemon:server": "LOG_LEVEL=debug PORT=8000 nodemon src/start-server.babel --watch dist/ssr/server",
+    "nodemon:server": "LOG_LEVEL=debug PORT=8000 nodemon src/start-server.babel --watch dist/server.js",
     "fix": "eslint --fix --ext .jsx src/index.jsx"
   },
   "repository": {

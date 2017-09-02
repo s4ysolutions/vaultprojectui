@@ -92,7 +92,7 @@ const base = {
 
 let config=base;
 
-const ENV=process.env.npm_lifecycle_event || "start";
+const ENV=process.env.npm_lifecycle_event || process.env.WEBPACK_ENV || "start";
 console.log({ ENV });
 
 // Client any

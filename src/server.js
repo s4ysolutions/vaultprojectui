@@ -35,7 +35,8 @@ export default function(parameters) {
 
   const chunks = parameters.chunks();
   const files = {
-    chunks: Object.values(chunks.javascript).map(s=>({ entry: "/assets/" + s }))
+    chunks: Object.values(chunks.javascript).map(s=>({ entry: "/assets/" + s })),
+    css: Object.values(chunks.styles).map(s=>({ entry: "/assets/" + s }))
   };
 
   console.log(files);

@@ -1,11 +1,18 @@
 import React from "react";
 import { Route, Link } from "react-router-dom";
+import Grid from "material-ui/Grid";
+import Typography from "material-ui/Typography";
+import "typeface-roboto";
+
 
 const C1 = ()=> <div>1</div>;
 const C2 = ()=> <div>2</div>;
+
 const App = ()=> 
-  <div>
-    <h1>Hi1!</h1>
+  <Grid container>
+    <Typography type="title" gutterBottom>
+  Hi!
+    </Typography>
     <ul>
       <li> <Link to="1">1</Link></li>
       <li> <Link to="2">2</Link></li>
@@ -13,6 +20,6 @@ const App = ()=>
     <hr/>
     <Route path="/1" component={C1}/>
     <Route path="/2" component={C2}/>
-  </div>;
+  </Grid> ;
 
 export default App;

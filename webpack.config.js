@@ -6,6 +6,12 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const CompressionPlugin = require("compression-webpack-plugin");
 
 const PATH_SRC = path.resolve(__dirname, "src");
+const PATH_NPM_CSS = [
+  path.join(__dirname, "node_modules", "typeface-roboto"),
+];
+const PATH_NPM_FONTS = [
+  path.join(__dirname, "node_modules", "typeface-roboto", "files"),
+];
 const PATH_DIST = path.resolve(__dirname, "dist");
 const PATH_DIST_ASSETS = path.resolve(PATH_DIST, "assets");
 
@@ -96,7 +102,38 @@ const rule_eslint =
             include: PATH_SRC
           };
 
+const rule_css_embed =
+  {
+    test: /\.css$/,
+    use: [ "style-loader", "css-loader" ],
+    include: [PATH_NPM_CSS]
+  
+  };
+
+const rule_css_extract = {
+  test: /\.css$/,
+  use: ExtractTextPlugin.extract({ use: "css-loader" }),
+  include: [PATH_NPM_CSS]
+};
+
+// Any
 const base = {
+  module: {
+    rules: [
+      {
+        // Match woff2 in addition to patterns like .woff?v=1.1.1.
+        test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
+        use: [{
+          loader: "file-loader",
+          options: {
+            mimetype: "application/font-woff",
+            name: "./fonts/[hash].[ext]"
+          }
+        }],
+        include: PATH_NPM_FONTS
+      }
+    ]
+  }
 };
 
 let config = base;
@@ -199,12 +236,32 @@ if ( ENV === "build:server"  || ENV == "start"){
       ]
     });
 }
-// Any produciton
-if (ENV === "build:client" || ENV == "build:server" || ENV == "start"){
+// Any development
+if (ENV.indexOf("dev:") >= 0){
   config = merge(
     config,
     {
+      module: {
+        rules: [ rule_css_embed ]
+      },
       plugins: [
+        new webpack.optimize.UglifyJsPlugin({
+          sourceMap: "source-map"
+        }),
+      ]
+    }
+  );
+}
+// Any produciton
+if (ENV.indexOf("build") >= 0 || ENV == "start"){
+  config = merge(
+    config,
+    {
+      module: {
+        rules: [ rule_css_extract ]
+      },
+      plugins: [
+        new ExtractTextPlugin("styles.css"),
         new webpack.optimize.UglifyJsPlugin({
           sourceMap: "source-map"
         }),

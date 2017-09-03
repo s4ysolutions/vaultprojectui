@@ -4,19 +4,17 @@
   "description": "HasiCorp Vault Web UI",
   "main": "index.js",
   "scripts": {
-    "start": "node src/start-server.native",
+    "start": "node src/start-ssr.native",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "run-s clean build:client build:server",
-    "build:static": "webpack --env=prod",
-    "build:client": "webpack --config \"./webpack.config.client.js\" --colors --display-error-details",
-    "build:server": "webpack --config \"./webpack.config.server.js\" --colors --display-error-details",
+    "build": "run-s clean build:static build:ssr",
     "clean": "rm -rf dist",
-    "dev": "run-p dev:client dev:server",
-    "dev:client": "webpack-dev-server --config webpack.config.client.js --colors --progress",
-    "dev:server": "run-p watch:webpack:server nodemon:server",
-    "watch:webpack:server": "webpack --watch --config webpack.config.server.js --colors --display-error-details",
-    "nodemon:server": "LOG_LEVEL=debug PORT=8000 nodemon src/start-server.babel --watch dist/server.js",
-    "fix": "eslint --fix --ext .jsx src/index.jsx"
+    "fix": "eslint --fix --ext .jsx src/index.jsx",
+    "dev:static": "webpack-dev-server --config webpack.config.static.js --colors --progress",
+    "build:static": "webpack --config \"./webpack.config.static.js\" --colors --display-error-details",
+    "dev:ssr": "run-p watch:webpack:ssr nodemon:ssr",
+    "build:ssr": "webpack --config \"./webpack.config.ssr.js\" --colors --display-error-details",
+    "watch:webpack:ssr": "webpack --watch --config webpack.config.ssr.js --colors --display-error-details",
+    "nodemon:ssr": "LOG_LEVEL=debug PORT=8000 nodemon src/start-ssr.native --watch dist/ssr/index.js"
   },
   "repository": {
     "type": "git",
@@ -37,7 +35,9 @@
     "babel-plugin-transform-runtime": "6.23.0",
     "babel-preset-env": "1.6.0",
     "babel-preset-react": "6.24.1",
+    "clean-webpack-plugin": "0.1.16",
     "compression-webpack-plugin": "1.0.0",
+    "copy-webpack-plugin": "4.0.1",
     "css-loader": "0.28.7",
     "eslint": "4.6.0",
     "eslint-loader": "1.9.0",
@@ -55,8 +55,8 @@
     "webpack-merge": "4.1.0"
   },
   "dependencies": {
+    "ejs": "2.5.7",
     "koa": "2.3.0",
-    "koa-ejs": "4.1.0",
     "koa-static-cache": "5.1.1",
     "material-ui": "1.0.0-beta.8",
     "react": "15.6.1",

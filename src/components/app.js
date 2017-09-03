@@ -2,7 +2,6 @@ import React from "react";
 import { Route, Link } from "react-router-dom";
 import Grid from "material-ui/Grid";
 import Typography from "material-ui/Typography";
-import "typeface-roboto";
 
 
 const C1 = ()=> <div>1</div>;

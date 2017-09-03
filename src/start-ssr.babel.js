@@ -12,8 +12,7 @@ require("babel-register")({
   plugins: [
     "babel-plugin-transform-runtime",
     "transform-async-to-generator",
-    "transform-object-rest-spread",
-    "react-hot-loader/babel"
+    "transform-object-rest-spread"
   ]
 });
-require("./start-server.js");
+require("./start-ssr.js");

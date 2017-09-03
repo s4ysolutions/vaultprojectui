@@ -2,6 +2,6 @@
 	"server":
 	{
 		"input": "./src/server.js",
-		"output": "./dist/server.js"
+		"output": "./dist/ssr/index.js"
 	}
 }

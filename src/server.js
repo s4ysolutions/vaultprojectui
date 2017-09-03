@@ -1,12 +1,13 @@
 import path from "path";
+import fs from "fs";
 import React from "react";
 import Koa from "koa";
-import staticCache from "koa-static-cache";
+import serve from "koa-static-cache";
 import winston from "winston";
 import winstonKoaLogger from "winston-koa2-logger";
 import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router";
-import ejs from "koa-ejs";
+import ejs from "ejs";
 import App from "./components/app";
 
 export default function(parameters) {
@@ -23,37 +24,32 @@ export default function(parameters) {
   });
 
   const app = new Koa();
-  ejs(app, {
-    layout: false,
-    root: path.join(__dirname, "../src"),
-    cache: false,
-    viewExt: "ejs",
-    debug: false
-  });
 
   app.use(winstonKoaLogger(log));
 
   const chunks = parameters.chunks();
   const files = {
-    chunks: Object.values(chunks.javascript).map(s=>({ entry: "/assets/" + s })),
-    css: Object.values(chunks.styles).map(s=>({ entry: "/assets/" + s }))
+    chunks: Object.values(chunks.javascript).map(s=>({ entry: "/static/" + s })),
+    css: Object.values(chunks.styles).map(s=>"/static/" + s )
   };
 
-  console.log(files);
-  app.use(staticCache(path.join(__dirname, "assets"), {
+  app.use(serve(path.join(__dirname, "..", "static"), {
     dynamic: true,
     maxAge: 365 * 24 * 60 * 60,
-    buffer: process.env.NODE_ENV === "production",
+    buffer: process.env.NODE_ENV === "production" ? "memory" : false,
+    gzip: true,
     usePrecompiledGzip: true,
-    prefix: "/assets/"
+    prefix: "/static/"
   }));
   
-  app.use((ctx/*, next*/) => {
+  const ejsTemplate = fs.readFileSync(path.resolve(__dirname, "index.ejs"), "utf8");
+  const ejsRender = ejs.compile(ejsTemplate);
+  app.use( (ctx/*, next*/) => {
     const ssr = renderToString(
       <StaticRouter location={ctx.request.url} context={{}}><App/></StaticRouter>
     );
-    return ctx.render("index", {
-      ssr,
+
+    ctx.body = ejsRender({
       htmlWebpackPlugin: {
         ssr,
         files,
@@ -62,6 +58,7 @@ export default function(parameters) {
         }
       }
     });
+    ctx.status = 200;
   });
 
   const PORT = process.env.PORT || 8280;

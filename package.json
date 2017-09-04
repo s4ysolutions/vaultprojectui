@@ -70,6 +70,7 @@
     "react-types": "0.1.0",
     "redux-observable": "0.16.0",
     "rxjs": "5.4.3",
+    "superagent": "3.6.0",
     "typeface-roboto": "0.0.35",
     "universal-webpack": "0.3.11",
     "winston": "2.3.1",

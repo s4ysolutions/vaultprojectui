@@ -5,18 +5,23 @@ import { AppContainer } from 'react-hot-loader';
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 import { Provider } from 'react-redux';
+import { createEpicMiddleware } from 'redux-observable';
+import superagent from 'superagent';
+import vault from 'src/lib/vault';
 
 import 'typeface-roboto';
 import 'normalize.css';
 import './style.css';
 
 import reducers from './reducers';
+import rootEpic from './epics';
 import App from './components/app';
 
 /*
 import LogRocket from "logrocket";
 LogRocket.init("ijym8y/vault-project");
 */
+
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
   combineReducers({
@@ -25,12 +30,12 @@ const store = createStore(
   }),
   composeEnhancers(
     applyMiddleware(
-      // createEpicMiddleware(rootEpic, { dependencies: { request } })
+      createEpicMiddleware(rootEpic, { dependencies: { vault: vault(superagent) } })
       // thunkMiddleware
       //	,			createLogger()
-    ),
+    )
     //    autoRehydrate()
-    //,window.devToolsExtension ? window.devToolsExtension():f=>f
+    , window.devToolsExtension ? window.devToolsExtension() : f=>f
   )
 );
 

@@ -11,8 +11,10 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const PATH_SRC = path.resolve(__dirname, 'src');
 const PATH_NPM_CSS = [
-  path.resolve(__dirname, 'node_modules', 'typeface-roboto')
+  path.resolve(__dirname, 'node_modules', 'typeface-roboto'),
+  path.resolve(__dirname, 'node_modules', 'normalize.css')
 ];
+const PATH_CSS = PATH_NPM_CSS.concat(PATH_SRC);
 const PATH_NPM_FONTS = [
   path.resolve(__dirname, 'node_modules', 'typeface-roboto', 'files')
 ];
@@ -122,14 +124,14 @@ const rule_eslint = {
 const rule_css_embed = {
   test: /\.css$/,
   use: [ 'style-loader', 'css-loader' ],
-  include: PATH_NPM_CSS
+  include: PATH_CSS
   
 };
 
 const rule_css_extract = {
   test: /\.css$/,
   use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader' }),
-  include: PATH_NPM_CSS
+  include: PATH_CSS
 };
 
 const rule_woff = {
@@ -181,9 +183,12 @@ if (ENV === 'dev:static' || ENV === 'build:static' ){
       },
       plugins: [
         new HtmlWebpackPlugin({
-          appMountId: 'reactMount',
           template: PATH_SRC + '/index.ejs',
-          filename: 'index.html',
+          // Must have to avoid duplicate AppContainer
+          inject: false,
+          hash: true,
+          showErrors: true,
+          appMountId: 'reactMount',
           title: 'HashiCorp Vault',
           minify: {}
         }),

@@ -1,24 +1,24 @@
 import React from 'react';
-import { Route, Link } from 'react-router-dom';
-import Grid from 'material-ui/Grid';
-import Typography from 'material-ui/Typography';
+import { Route, Switch } from 'react-router-dom';
 
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import createMuiTheme from 'material-ui/styles/createMuiTheme';
+import createPalette from 'material-ui/styles/createPalette';
 
-const C1 = ()=> <div>1</div>;
-const C2 = ()=> <div>2</div>;
+import Login from './visitor/login';
+
+const muiTheme = createMuiTheme({
+  palette: createPalette({
+    type: 'light'
+  })
+});
 
 const App = ()=> 
-  <Grid container>
-    <Typography type="title" gutterBottom>
-  Hi!
-    </Typography>
-    <ul>
-      <li> <Link to="1">1</Link></li>
-      <li> <Link to="2">2</Link></li>
-    </ul>
-    <hr/>
-    <Route path="/1" component={C1}/>
-    <Route path="/2" component={C2}/>
-  </Grid> ;
+  <MuiThemeProvider theme={muiTheme}>
+    <Switch>
+      <Route exact path="/login" component={Login}/>
+    </Switch>
+  </MuiThemeProvider>
+;
 
 export default App;

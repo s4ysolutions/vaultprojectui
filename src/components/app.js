@@ -10,7 +10,7 @@ const C2 = ()=> <div>2</div>;
 const App = ()=> 
   <Grid container>
     <Typography type="title" gutterBottom>
-  Hi!
+  Hi2!
     </Typography>
     <ul>
       <li> <Link to="1">1</Link></li>

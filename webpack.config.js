@@ -172,7 +172,6 @@ if (ENV === "dev:static" || ENV === "build:static" ){
   config = merge(
     config,
     {
-      entry: path.resolve(PATH_SRC, "index.jsx"),
       output: {
         filename: "[name].[hash].js",
         path: PATH_DIST_STATIC
@@ -205,9 +204,21 @@ if (ENV === "dev:static" ){
   config = merge(
     config,
     {
+      entry: [
+        "react-hot-loader/patch",
+        path.resolve(PATH_SRC, "index.jsx")
+      ],
+      devtool: "inline-source-map",
+      devServer: {
+        hot: true
+      },
       module: {
         rules: [ rule_babel_static_dev ],
-      }
+      },
+      plugins: [
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NamedModulesPlugin()
+      ]
     }
   );
 }
@@ -217,6 +228,7 @@ if (ENV === "build:static" ){
   config = merge(
     config,
     {
+      entry: path.resolve(PATH_SRC, "index.jsx"),
       module: {
         rules: [ rule_babel_static_prod, rule_css_extract],
       },

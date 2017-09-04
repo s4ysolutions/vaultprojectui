@@ -30,7 +30,7 @@
 		"async-await/space-after-await": 2,
 		"indent": [ "warn", 2, {"SwitchCase": 1, "MemberExpression": "off"} ],
 		"linebreak-style": [ "error", "unix" ],
-		"quotes": [ "error", "double" ],
+		"quotes": [ "error", "single" ],
 		"semi": [ "error", "always" ],
 		"no-console": [ "warn" ],
 		"no-unused-vars": [ "warn" ],

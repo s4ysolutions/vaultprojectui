@@ -6,6 +6,11 @@ import "typeface-roboto";
 
 import App from "./components/app";
 
+/*
+import LogRocket from "logrocket";
+LogRocket.init("ijym8y/vault-project");
+*/
+
 const render = Component => { ReactDOM.render(
   <AppContainer>
     <BrowserRouter>

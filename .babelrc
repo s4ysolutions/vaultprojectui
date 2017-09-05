@@ -1,0 +1,10 @@
+{
+	presets:[
+		"react",["env", {"modules": false}]
+	],
+	plugins:[
+		"react-hot-loader/babel",
+		"transform-es2015-modules-commonjs",
+		["transform-object-rest-spread", { "useBuiltIns": true }]
+	]
+}

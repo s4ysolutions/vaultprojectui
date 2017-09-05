@@ -14,11 +14,12 @@
 	"env": {
 	  "es6": true,
 		"browser": true,
-		"node": false
+		"node": false,
+		"mocha": true
 	},
 	// Enable custom plugin known as eslint-plugin-react
 	"plugins": [
-		"react","async-await"
+		"react","async-await","mocha"
 	],
 	"rules": {
 		"space-infix-ops": ["error"],
@@ -42,6 +43,14 @@
 	//	"no-underscore-dangle": ["error", {"allow": ["_id","_server"]}]
 	},
 	"globals": {
-		"module": true
+		"module": true,
+    "nocker": true,
+    "nock": true,
+    "vault": true,
+    "delay": true,
+    "vaultObservable": true,
+    "storeFactory": true,
+    "rootEpic": true,
+		"expect": true
 	}
 }

@@ -26,7 +26,6 @@ const messages = (state = initMessages, action) => {
   switch (action.type){
     case A.VAULT_AUTH_LOOKUP_SELF:
       return { ...state, vaultErrors: [] };
-      break;
     case A.VAULT_ERROR:
       if (action.error.response && action.error.response.xhr){
         const response = action.error.response;

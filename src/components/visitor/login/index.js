@@ -1,20 +1,26 @@
 import React from 'react';
+import { PropTypes } from 'prop-types';
 import Media from 'react-media';
-import Grid from 'material-ui/Grid';
-import Dialog, { DialogTitle, DialogContent } from 'material-ui/Dialog';
+import Dialog, { DialogTitle } from 'material-ui/Dialog';
+import { LinearProgress } from 'material-ui/Progress';
 import LoginForm from './form';
+import { connect } from 'react-redux';
 
-const Login = () =>
+const _LoginPage = ({ isQuerying }) =>
   <Media query="(max-width: 601px)">{
     matched =>
       <Dialog open={true} fullScreen={matched}>
         <DialogTitle>Authentificate</DialogTitle>
-        <DialogContent>
-          <LoginForm/>
-        </DialogContent>
+        <LoginForm/>
+        {isQuerying && <LinearProgress/>}
       </Dialog>
   }
   </Media>
   ;
 
-export default Login;
+_LoginPage.propTypes = {
+  isQuerying: PropTypes.bool
+};
+
+const LoginPage = connect(state=>({ isQuerying: state.transient.isVaultQuerying }))(_LoginPage);
+export default LoginPage;

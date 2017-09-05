@@ -24,9 +24,10 @@ export const vaultAuthLookupSelfEpic = (action$, store) =>
   action$.ofType(VAULT_AUTH_LOOKUP_SELF)
   .mergeMap(
     () =>vaultObservable.auth.token.lookupSelf(store.getState().vault)
+    .map(vaultAuthLookupSelfPayload)
+    .catch(error=>Observable.of(vaultError(error)))
   )
-.map(vaultAuthLookupSelfPayload)
-.catch(error=>Observable.of(vaultError(error))); 
+; 
 
 export default combineEpics(
 //  vaultAuthSetTokenEpic,

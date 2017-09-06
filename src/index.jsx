@@ -2,53 +2,38 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { AppContainer } from 'react-hot-loader';
-import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 import { Provider } from 'react-redux';
-import { createEpicMiddleware } from 'redux-observable';
+import { persistStore } from 'redux-persist';
+
 
 import 'typeface-roboto';
 import 'normalize.css';
 import './style.css';
 
-import reducers from './reducers';
-import rootEpic from './epics';
 import App from './components/app';
+import rootEpic from './epics';
+import store from './store';
+import { epicMiddleware } from './store';
 
 /*
 import LogRocket from "logrocket";
 LogRocket.init("ijym8y/vault-project");
 */
-const epicMiddleware = createEpicMiddleware(rootEpic);
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const store = createStore(
-  combineReducers({
-    ...reducers,
-    form: formReducer
-  }),
-  composeEnhancers(
-    applyMiddleware(
-      epicMiddleware,
-      // thunkMiddleware
-      //	,			createLogger()
-    )
-    //    autoRehydrate()
-  )
-);
 
 const render = Component => { ReactDOM.render(
   <AppContainer>
-    <Provider store={store}>
-      <BrowserRouter>
+    <BrowserRouter>
+      <Provider store={store}>
         <Component/>
-      </BrowserRouter>
-    </Provider>
+      </Provider>
+    </BrowserRouter>
   </AppContainer>,
   document.getElementById('reactMount')
 );};
 
-render(App);
+persistStore(store, { blacklist: ['form', 'transient', 'messages'], keyPrefix: 'vaultproject-ui' }, ()=>render(App));
 
 if (module.hot) {
   module.hot.accept('./components/app', () => {

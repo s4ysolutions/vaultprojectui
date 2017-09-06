@@ -73,6 +73,7 @@
     "react-router-dom": "4.2.2",
     "react-types": "0.1.0",
     "redux-observable": "0.16.0",
+    "redux-persist": "4.9.1",
     "rxjs": "5.4.3",
     "superagent": "3.6.0",
     "typeface-roboto": "0.0.35",

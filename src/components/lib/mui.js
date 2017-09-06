@@ -2,13 +2,15 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import TextField from 'material-ui/TextField';
 
-export const renderMuiTextField = ({ label, helperText, placeholder, input, meta, ...props }) => 
+const _ = o=>(console.log(o), o);
+
+export const renderMuiTextField = ({ helperText, input, meta, ...props }) => 
   <TextField
-    label={label}
-    placeholder={placeholder}
-    helperText={helperText}
+    value={input.value}
+    helperText={(meta.dirty || meta.submitFailed) && meta.error || helperText}
     disabled = {meta.submitting}
     inputProps={input}
+    error={!!((meta.dirty || meta.submitFailed) && meta.error)}
     {...props}
   />;
 

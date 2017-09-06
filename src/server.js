@@ -1,20 +1,23 @@
-import path from "path";
-import fs from "fs";
-import React from "react";
-import Koa from "koa";
-import serve from "koa-static-cache";
-import winston from "winston";
-import winstonKoaLogger from "winston-koa2-logger";
-import { renderToString } from "react-dom/server";
-import { StaticRouter } from "react-router";
-import ejs from "ejs";
-import App from "./components/app";
+import path from 'path';
+import fs from 'fs';
+import React from 'react';
+import { renderToString } from 'react-dom/server';
+import { StaticRouter } from 'react-router';
+import { Provider } from 'react-redux';
+import Koa from 'koa';
+import serve from 'koa-static-cache';
+import winston from 'winston';
+import winstonKoaLogger from 'winston-koa2-logger';
+import ejs from 'ejs';
+
+import App from './components/app';
+import store from './store';
 
 export default function(parameters) {
   const log = new (winston.Logger)({
     transports: [
       new (winston.transports.Console)({
-        level: process.env.LOG_LEVEL || "debug",
+        level: process.env.LOG_LEVEL || 'debug',
         prettyPrint: true,
         timestamp: true,
         silent: false,
@@ -29,24 +32,28 @@ export default function(parameters) {
 
   const chunks = parameters.chunks();
   const files = {
-    chunks: Object.values(chunks.javascript).map(s=>({ entry: "/static/" + s })),
-    css: Object.values(chunks.styles).map(s=>"/static/" + s )
+    chunks: Object.values(chunks.javascript).map(s=>({ entry: '/static/' + s })),
+    css: Object.values(chunks.styles).map(s=>'/static/' + s )
   };
 
-  app.use(serve(path.join(__dirname, "..", "static"), {
+  app.use(serve(path.join(__dirname, '..', 'static'), {
     dynamic: true,
     maxAge: 365 * 24 * 60 * 60,
-    buffer: process.env.NODE_ENV === "production" ? "memory" : false,
+    buffer: process.env.NODE_ENV === 'production' ? 'memory' : false,
     gzip: true,
     usePrecompiledGzip: true,
-    prefix: "/static/"
+    prefix: '/static/'
   }));
   
-  const ejsTemplate = fs.readFileSync(path.resolve(__dirname, "index.ejs"), "utf8");
+  const ejsTemplate = fs.readFileSync(path.resolve(__dirname, 'index.ejs'), 'utf8');
   const ejsRender = ejs.compile(ejsTemplate);
   app.use( (ctx/*, next*/) => {
     const ssr = renderToString(
-      <StaticRouter location={ctx.request.url} context={{}}><App/></StaticRouter>
+      <Provider store={store}>
+        <StaticRouter location={ctx.request.url} context={{}}>
+          <App/>
+        </StaticRouter>
+      </Provider>
     );
 
     ctx.body = ejsRender({
@@ -54,7 +61,7 @@ export default function(parameters) {
         ssr,
         files,
         options: {
-          appMountId: "reactMount"
+          appMountId: 'reactMount'
         }
       }
     });
@@ -65,10 +72,10 @@ export default function(parameters) {
 
   app.listen(PORT, err => {
     if (err) {
-      log.error("Can't start", err);
+      log.error('Can\'t start', err);
     }else{
       // eslint-disable-next-line no-console
-      log.info("HoshiCorp Vault UI listen on " + PORT + "\x07");
+      log.info('HoshiCorp Vault UI listen on ' + PORT + '\x07');
     }
   });
 }

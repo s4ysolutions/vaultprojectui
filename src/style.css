@@ -5,3 +5,7 @@ html, body, #reactMount, #root {
     height: 100%;
 }
 
+.login_form {
+	display: "flex";
+	flex: "wrap";
+}

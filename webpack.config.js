@@ -162,9 +162,6 @@ if (ENV.indexOf('build') >= 0  || ENV == 'start'){
   config = merge(
     config,
     {
-      module: {
-        rules: [ rule_eslint ]
-      },
     }
   );
 }
@@ -326,6 +323,9 @@ if (ENV.indexOf('build') >= 0  || ENV == 'start'){
   config = merge(
     config,
     {
+      module: {
+        rules: [ rule_eslint ]
+      },
       plugins: [
         new webpack.optimize.UglifyJsPlugin({
           sourceMap: 'source-map'

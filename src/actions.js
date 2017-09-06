@@ -1,3 +1,9 @@
+//[[[ Noop
+export const ACTION_NOOP = 'ACTION_NOOP';
+export const actionNoop = () => ({
+  type: ACTION_NOOP,
+});
+//]]]
 //[[[ Vault
 //[[[ Error
 export const VAULT_ERROR = 'VAULT_ERROR';
@@ -21,13 +27,15 @@ export const vaultAuthSetToken = (token) => ({
 });
 
 export const VAULT_AUTH_LOOKUP_SELF = 'VAULT_AUTH_LOOKUP_SELF';
-export const vaultAuthLookupSelf = () => ({
-  type: VAULT_AUTH_LOOKUP_SELF
+export const vaultAuthLookupSelf = success => ({
+  type: VAULT_AUTH_LOOKUP_SELF,
+  success
 });
 export const VAULT_AUTH_LOOKUP_SELF_PAYLOAD = 'VAULT_AUTH_LOOKUP_SELF_PAYLOAD';
-export const vaultAuthLookupSelfPayload = (payload) => ({
+export const vaultAuthLookupSelfPayload = (payload, success) => ({
   type: VAULT_AUTH_LOOKUP_SELF_PAYLOAD,
-  payload
+  payload,
+  success
 });
 //]]]
 //]]]

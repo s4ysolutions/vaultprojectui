@@ -1,20 +1,28 @@
 import u from 'update-immutable';
 import * as A from './actions';
 
+const initPersistent = {
+  lastTab: '/secrets'
+};
+
+const persistent = (state = initPersistent, action) => {
+  return state;
+};
+
 const initTransient = {
-  token_verified: false,
+  isTokenVerified: false,
   isVaultQuerying: false
 };
 const transient = (state = initTransient, action) => {
   switch (action.type){
     case A.VAULT_AUTH_SET_TOKEN:
-      return { ...state, token_verified: false };
+      return { ...state, isTokenVerified: false };
     case A.VAULT_AUTH_LOOKUP_SELF:
       return { ...state, isVaultQuerying: true };
     case A.VAULT_ERROR:
       return { ...state, isVaultQuerying: false };
     case A.VAULT_AUTH_LOOKUP_SELF_PAYLOAD:
-      return { ...state, isVaultQuerying: false, token_verified: true };
+      return { ...state, isVaultQuerying: false, isTokenVerified: true };
   }
   return state;
 };
@@ -57,6 +65,7 @@ const vault = (state = initVault, action)=>{
 };
 
 export default {
+  persistent,
   transient,
   messages,
   vault

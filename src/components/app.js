@@ -9,7 +9,8 @@ import { connect } from 'react-redux';
 
 import Login from './visitor/login';
 import Secrets from './authentificated/secrets';
-import NotFound from './404';
+import Polices from './authentificated/polices';
+import Grants from './authentificated/grants';
 
 const _ = o=>(console.log(o), o);
 
@@ -19,9 +20,9 @@ const muiTheme = createMuiTheme({
   })
 });
 
-const Authentificated = ({ isTokenVerified, ...props }) => isTokenVerified ? <Route {...props}/> : <Redirect to="/authentificate"/>;
-Authentificated.propTypes = {
-  isTokenVerified: PropTypes.bool.isRequired,
+const ProtectedRoute = ({ isAllowed, ...props }) => isAllowed ? <Route {...props}/> : <Redirect to="/authentificate"/>;
+ProtectedRoute.propTypes = {
+  isAllowed: PropTypes.bool.isRequired,
   component: PropTypes.func.isRequired
 };
 
@@ -29,7 +30,9 @@ const _App = ({ lastTab, isTokenVerified })=>
   <MuiThemeProvider theme={muiTheme}>
     <Switch>
       <Route exact path="/authentificate" component={Login}/>
-      <Authentificated isTokenVerified={isTokenVerified} exact path="/secrets" component={Secrets}/>
+      <ProtectedRoute isAllowed={isTokenVerified} exact path="/secrets" component={Secrets}/>
+      <ProtectedRoute isAllowed={isTokenVerified} exact path="/polices" component={Polices}/>
+      <ProtectedRoute isAllowed={isTokenVerified} exact path="/grants" component={Grants}/>
       <Redirect from="/" to={lastTab}/>
     </Switch>
   </MuiThemeProvider>;

@@ -30,6 +30,7 @@ const _LoginForm = ({ handleSubmit, classes }) =>
         className={classes.token}
         component={renderMuiTextField}/>
       <br/>
+      <br/>
       <Field
         required
         name="token"
@@ -41,7 +42,7 @@ const _LoginForm = ({ handleSubmit, classes }) =>
     </DialogContent>
     <DialogActions>
       <Button raised color="primary" type="submit">
-        Authorize
+        Authentificate
       </Button>
       <br/>
     </DialogActions>

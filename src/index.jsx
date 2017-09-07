@@ -33,7 +33,7 @@ const render = Component => { ReactDOM.render(
   document.getElementById('reactMount')
 );};
 
-persistStore(store, { blacklist: ['form', 'transient', 'messages'], keyPrefix: 'vaultproject-ui' }, ()=>render(App));
+persistStore(store, { blacklist: ['form', 'xtransient', 'messages'], keyPrefix: 'vaultproject-ui' }, ()=>render(App));
 
 if (module.hot) {
   module.hot.accept('./components/app', () => {

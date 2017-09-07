@@ -64,6 +64,7 @@
     "koa-static-cache": "5.1.1",
     "logrocket": "0.5.4",
     "material-ui": "1.0.0-beta.8",
+    "material-ui-icons": "1.0.0-beta.5",
     "normalize.css": "7.0.0",
     "react": "15.6.1",
     "react-dom": "15.6.1",

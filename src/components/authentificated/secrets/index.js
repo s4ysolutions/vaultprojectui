@@ -12,9 +12,10 @@ import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
 import  backendsListItems from './backends-list';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 
 const drawerWidth = 240;
-
 const styles = theme => ({
   root: {
     width: '100%',
@@ -94,10 +95,6 @@ const styles = theme => ({
   },
 });
 
-PersistentDrawer.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
 const PersistentDrawer = ({ classes, open }) => {
   <div className={classes.root}>
     <div className={classes.appFrame}>
@@ -142,4 +139,14 @@ const PersistentDrawer = ({ classes, open }) => {
   </div>;
 };
 
-export default withStyles(styles)(PersistentDrawer);
+PersistentDrawer.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+
+export default compose(
+  withStyles(styles),
+  connect(state=>({
+    open: true
+  })))
+(PersistentDrawer);

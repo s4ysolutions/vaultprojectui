@@ -52,6 +52,8 @@ const _LoginForm = ({ handleSubmit, classes, errors, valid, submitting }) =>
 ;
 
 _LoginForm.propTypes = {
+  valid: PropTypes.bool.isRequired,
+  submitting: PropTypes.bool.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   errors: PropTypes.array.isRequired

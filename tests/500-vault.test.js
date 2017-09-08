@@ -4,9 +4,12 @@ describe('Vault', function(){
     nocker.get(URI).reply(403, { errors: ['Not permitted'] });
 
     vaultObservable.auth.token.lookupSelf(vault).subscribe(
-      function(data) { expect.fail('Must not be any data'); },
-      function(error) { done(); },
-      function () { expect.fail('Must be an error'); }
+      function(result) {
+        expect(result).to.has.property('errors');
+        expect(result.errors.length).to.be.equal(1);
+      },
+      function (error) { expect.fail('Must not be an error'); },
+      function() { done(); },
     );
   });
 });

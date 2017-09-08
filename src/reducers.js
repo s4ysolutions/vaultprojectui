@@ -1,8 +1,8 @@
 import u from 'update-immutable';
 import * as A from './actions';
-
+//[[[ Persistent
 const initPersistent = {
-  lastTab: '/secrets'
+  lastTab: '/secrets/generic'
 };
 
 const persistent = (state = initPersistent, action) => {
@@ -11,62 +11,69 @@ const persistent = (state = initPersistent, action) => {
 
 const initTransient = {
   isTokenVerified: false,
-  isVaultQuerying: false
+  isVaultQuerying: false,
+  isDrawerOpen: false
 };
 const transient = (state = initTransient, action) => {
   switch (action.type){
-    case A.VAULT_AUTH_SET_TOKEN:
+    case A.UI_DRAWER_OPEN:
+      return { ...state, isDrawerOpen: true };
+    case A.UI_DRAWER_CLOSE:
+      return { ...state, isDrawerOpen: false };
+    case A.VAULT_EXIT:
       return { ...state, isTokenVerified: false };
     case A.VAULT_AUTH_LOOKUP_SELF:
       return { ...state, isVaultQuerying: true };
-    case A.VAULT_ERROR:
-      return { ...state, isVaultQuerying: false };
-    case A.VAULT_AUTH_LOOKUP_SELF_PAYLOAD:
-      return { ...state, isVaultQuerying: false, isTokenVerified: true };
+    case A.VAULT_COMPLETED:
+      return {
+        ...state,
+        isVaultQuerying: false,
+        isTokenVerified: (action.action.type === A.VAULT_AUTH_LOOKUP_SELF)
+      };
   }
   return state;
 };
-
+//]]]
+//[[[ Message
 const initMessages = {
   vaultErrors: []
 };
 const messages = (state = initMessages, action) => {
   switch (action.type){
-    case A.VAULT_AUTH_LOOKUP_SELF:
-      return { ...state, vaultErrors: [] };
-    case A.VAULT_ERROR:
-      if (action.error.response && action.error.response.xhr){
-        const response = action.error.response;
-        const errors = (response.type === 'application/json') ? response.body.errors : [response.text];
-        return { ...state, vaultErrors: errors };
-      }else if (action.error.message) {
-        return { ...state, vaultErrors: [action.error.message] };
-      }else {
-        return { ...state, vaultErrors: [action.error] };
-      }
+    case A.VAULT_COMPLETED :
+      return { ...state, vaultErrors: action.payload.errors || [] };
   }
   return state;
 };
-
+//]]]
+//[[[ Vault
 const initVault = {
-  uri: 'http://127.0.0.1:8200',
+  url: 'http://127.0.0.1:8200',
   auth: {
     token: null
+  },
+  secret: {
+    generic: {
+    },
+    consul: {
+    }
   }
 };
 const vault = (state = initVault, action)=>{
   switch (action.type){
-    case A.VAULT_SET_URI:
-      return u(state, { uri: { $set: action.uri } });
+    case A.VAULT_SET_URL:
+      return u(state, { url: { $set: action.url } });
     case A.VAULT_AUTH_SET_TOKEN:
       return u(state, { auth: { token: { $set: action.token } } });
   }
   return state;
 };
-
+//]]]
+//[[[ export
 export default {
   persistent,
   transient,
   messages,
   vault
 };
+//]]]

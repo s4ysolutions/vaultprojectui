@@ -9,67 +9,33 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
-const PATH_SRC = path.resolve(__dirname, 'src');
+const PATH_SRC = path.join(__dirname, 'src');
 const PATH_NPM_CSS = [
-  path.resolve(__dirname, 'node_modules', 'typeface-roboto'),
-  path.resolve(__dirname, 'node_modules', 'normalize.css')
+  path.join(__dirname, 'node_modules', 'typeface-roboto'),
+  path.join(__dirname, 'node_modules', 'normalize.css')
 ];
 const PATH_CSS = PATH_NPM_CSS.concat(PATH_SRC);
 const PATH_NPM_FONTS = [
-  path.resolve(__dirname, 'node_modules', 'typeface-roboto', 'files')
+  path.join(__dirname, 'node_modules', 'typeface-roboto', 'files')
 ];
-const PATH_DIST = path.resolve(__dirname, 'dist');
-const PATH_DIST_STATIC = path.resolve(PATH_DIST, 'static');
-const PATH_DIST_SSR = path.resolve(PATH_DIST, 'ssr');
+const PATH_DIST = path.join(__dirname, 'dist');
+const PATH_DIST_STATIC = path.join(PATH_DIST, 'static');
+const PATH_DIST_SSR = path.join(PATH_DIST, 'ssr');
 
 const ENV = process.env.npm_lifecycle_event || process.env.WEBPACK_ENV || 'start';
 console.log({ ENV });
 //]]]
 //[[[ rules
-/*
-const rule_ejs = {
-  test: /\.ejs$/,
-  use: [{
-    loader: "file-loader",
-    options: { outputPath: PATH_DIST_SSR, name: "[name].[ext]", emitFile: true }
-  }],
-  include: PATH_SRC
-};
-*/
-const rule_babel_static_dev = {
-  test: /\.jsx?$/,
-  exclude: /node_modules/,
-  use: [{
-    loader: 'babel-loader',
-    options: {
-      presets: [
-        ['env', {
-          'modules': false,
-          'targets': { 'browsers': ['last 2 versions', 'safari >= 7'] },
-          useBuiltIns: true
-        }],
-        'react'
-      ],
-      plugins: [
-        'babel-plugin-transform-runtime',
-        'transform-async-to-generator',
-        'transform-object-rest-spread',
-        'react-hot-loader/babel'
-      ]
-    }
-  }],
-  include: PATH_SRC
-};
-
 const rule_babel_static_prod = {
   test: /\.jsx?$/,
   exclude: /node_modules/,
   use: [{
     loader: 'babel-loader',
     options: {
+      cacheDirectory: true,
       presets: [
         ['env', {
-          'modules': false,
+          'modules': 'commonjs',
           'targets': { 'browsers': ['last 2 versions', 'safari >= 7'] },
           useBuiltIns: true
         }],
@@ -77,13 +43,15 @@ const rule_babel_static_prod = {
       ],
       plugins: [
         'babel-plugin-transform-runtime',
-        'transform-async-to-generator',
         'transform-object-rest-spread'
       ]
-    }
+    },
   }],
   include: PATH_SRC
 };
+
+const rule_babel_static_dev = Object.assign({}, rule_babel_static_prod);
+
 // less babelize
 const rule_babel_server = {
   test: /\.jsx?$/,
@@ -151,9 +119,17 @@ const rule_woff = {
 //]]]
 // [[[ Any
 const base = {
+  cache: false,
   module: {
     rules: [ rule_woff ]
-  }
+  },
+  resolve: {
+    modules: [
+      'src',
+      'node_modules'
+    ],
+    extensions: ['.js', '.jsx']
+  },
 };
 let config = base;
 ///]]]
@@ -175,9 +151,6 @@ if (ENV === 'dev:static' || ENV === 'build:static' ){
         filename: '[name].[hash].js',
         path: PATH_DIST_STATIC
       },
-      resolve: {
-        extensions: ['.js', '.jsx']
-      },
       plugins: [
         new HtmlWebpackPlugin({
           template: PATH_SRC + '/index.ejs',
@@ -188,14 +161,7 @@ if (ENV === 'dev:static' || ENV === 'build:static' ){
           appMountId: 'reactMount',
           title: 'HashiCorp Vault',
           minify: {}
-        }),
-        new CompressionPlugin({  
-          asset: '[file].gz',
-          algorithm: 'gzip',
-          test: /\.js$|\.css$|\.html$/,
-          threshold: 1024,
-          minRatio: 0
-        }),
+        })
       ]
     }
   );
@@ -207,16 +173,20 @@ if (ENV === 'dev:static' ){
     config,
     {
       entry: [
+        /*
         'react-hot-loader/patch',
         'webpack-dev-server/client?http://localhost:8080',
         'webpack/hot/only-dev-server',
-        path.resolve(PATH_SRC, 'index.jsx')
+        */
+        './src/index.jsx'
       ],
       output: {
         publicPath: 'http://localhost:8080/'
       },
-      devtool: 'inline-source-map',
+      cache: true,
+      devtool: 'eval',
       devServer: {
+        publicPath: '/',
         hot: true,
         host: 'localhost',
         port: 8080,
@@ -239,7 +209,7 @@ if (ENV === 'build:static' ){
   config = merge(
     config,
     {
-      entry: path.resolve(PATH_SRC, 'index.jsx'),
+      entry: './src/index.jsx',
       module: {
         rules: [ rule_babel_static_prod, rule_css_extract],
       },
@@ -247,6 +217,13 @@ if (ENV === 'build:static' ){
         new ExtractTextPlugin('styles.[contenthash].css'),
         new webpack.DefinePlugin({
           'process.env.NODE_ENV': JSON.stringify('production')
+        }),
+        new CompressionPlugin({  
+          asset: '[file].gz',
+          algorithm: 'gzip',
+          test: /\.js$|\.css$|\.html$/,
+          threshold: 1024,
+          minRatio: 0
         }),
         new CleanWebpackPlugin([PATH_DIST_STATIC], {
           verbose: true,
@@ -262,10 +239,7 @@ if (ENV.indexOf('ssr') >= 0 || ENV === 'start'){
   config = merge(
     config,
     {
-      entry: path.resolve(PATH_SRC, 'server.js'),
-      resolve: {
-        extensions: ['.js', '.jsx']
-      },
+      entry: './src/server.js',
       module: {
         rules: [ rule_babel_server/*, rule_ejs*/]
       },
@@ -327,9 +301,11 @@ if (ENV.indexOf('build') >= 0  || ENV == 'start'){
         rules: [ rule_eslint ]
       },
       plugins: [
+        /*
         new webpack.optimize.UglifyJsPlugin({
           sourceMap: 'source-map'
         }),
+       */
       ]
     }
   );

@@ -4,22 +4,38 @@ export const actionNoop = () => ({
   type: ACTION_NOOP,
 });
 //]]]
-//[[[ Vault
-//[[[ Error
-export const VAULT_ERROR = 'VAULT_ERROR';
-export const vaultError = error => ({
-  type: VAULT_ERROR,
-  error
+//[[[ Transient UI
+export const UI_DRAWER_OPEN = 'UI_DRAWER_OPEN';
+export const uiDrawerOpen = () => ({
+  type: UI_DRAWER_OPEN
+});
+export const UI_DRAWER_CLOSE = 'UI_DRAWER_CLOSE';
+export const uiDrawerClose = () => ({
+  type: UI_DRAWER_CLOSE
 });
 //]]]
-//[[[ URI
-export const VAULT_SET_URI = 'VAULT_SET_URI';
-export const vaultSetURI = uri => ({
-  type: VAULT_SET_URI,
-  uri
+//[[[ Vault
+//[[[ Completed
+export const VAULT_COMPLETED = 'VAULT_COMPLETED';
+export const vaultCompleted = (payload, query_action) => ({
+  type: VAULT_COMPLETED,
+  payload,
+  action: query_action
+});
+//]]]
+//[[[ URL
+export const VAULT_SET_URL = 'VAULT_SET_URL';
+export const vaultSetURL = url => ({
+  type: VAULT_SET_URL,
+  url
 });
 //]]]
 //[[[ Auth
+export const VAULT_EXIT = 'VAULT_EXIT';
+export const vaultExit = () => ({
+  type: VAULT_EXIT
+});
+
 export const VAULT_AUTH_SET_TOKEN = 'VAULT_AUTH_SET_TOKEN';
 export const vaultAuthSetToken = (token) => ({
   type: VAULT_AUTH_SET_TOKEN,
@@ -27,15 +43,30 @@ export const vaultAuthSetToken = (token) => ({
 });
 
 export const VAULT_AUTH_LOOKUP_SELF = 'VAULT_AUTH_LOOKUP_SELF';
-export const vaultAuthLookupSelf = success => ({
+export const vaultAuthLookupSelf = (alwaysOrSuccess, fail) => ({
   type: VAULT_AUTH_LOOKUP_SELF,
-  success
+  always: !fail && alwaysOrSuccess,
+  success: fail && alwaysOrSuccess,
+  fail: fail
 });
-export const VAULT_AUTH_LOOKUP_SELF_PAYLOAD = 'VAULT_AUTH_LOOKUP_SELF_PAYLOAD';
-export const vaultAuthLookupSelfPayload = (payload, success) => ({
-  type: VAULT_AUTH_LOOKUP_SELF_PAYLOAD,
-  payload,
-  success
+//]]]
+//[[[ Secret
+//[[[ Generic
+export const VAULT_SECRET_GENERIC_LIST = 'VAULT_SECRET_GENERIC_LIST';
+export const vaultSecretGenericList = (alwaysOrSuccess, fail) => ({
+  type: VAULT_SECRET_GENERIC_LIST,
+  always: !fail && alwaysOrSuccess,
+  success: fail && alwaysOrSuccess,
+  fail: fail
 });
+export const VAULT_SECRET_GENERIC_PUT = 'VAULT_SECRET_GENERIC_PUT';
+export const vaultSecretGenericPut = (data, alwaysOrSuccess, fail) => ({
+  type: VAULT_SECRET_GENERIC_PUT,
+  data,
+  always: !fail && alwaysOrSuccess,
+  success: fail && alwaysOrSuccess,
+  fail: fail
+});
+//]]]
 //]]]
 //]]]

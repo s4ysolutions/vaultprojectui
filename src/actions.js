@@ -59,6 +59,14 @@ export const vaultSecretGenericList = (alwaysOrSuccess, fail) => ({
   success: fail && alwaysOrSuccess,
   fail: fail
 });
+export const VAULT_SECRET_GENERIC_GET = 'VAULT_SECRET_GENERIC_GET';
+export const vaultSecretGenericGet = (path, alwaysOrSuccess, fail) => ({
+  type: VAULT_SECRET_GENERIC_LIST,
+  path,
+  always: !fail && alwaysOrSuccess,
+  success: fail && alwaysOrSuccess,
+  fail: fail
+});
 export const VAULT_SECRET_GENERIC_PUT = 'VAULT_SECRET_GENERIC_PUT';
 export const vaultSecretGenericPut = (path, kvs, alwaysOrSuccess, fail) => ({
   type: VAULT_SECRET_GENERIC_PUT,

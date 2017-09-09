@@ -1,7 +1,15 @@
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import { ActionsObservable } from 'redux-observable';
-import { vaultAuthLookupSelf, VAULT_COMPLETED, VAULT_ERROR, vaultSetURL } from '../src/actions';
+import {
+  vaultAuthLookupSelf,
+  vaultSecretGenericGet,
+  vaultSecretGenericPut,
+  vaultSetURL,
+  VAULT_COMPLETED,
+  VAULT_ERROR
+} from '../src/actions';
+
 import { vaultAuthLookupSelfEpic } from '../src/epics';
 
 const _ = o => (console.log(o), o);
@@ -69,4 +77,21 @@ describe('Epics', function(){
       done
     );
   });
+  it.only('secret read', function(done){
+    const URL = '/v1/auth/secret/foo';
+    nocker.get(URL).reply(200, {
+      'data': {
+        {a: 1}
+      }
+    });
+    rootEpic(ActionsObservable.of(vaultSecretGenericGet('/foo')), store)
+    .subscribe( 
+      a=>{
+        expect(a).to.have.property('type', VAULT_COMPLETED),
+        expect(a).to.have.property('payload').which.to.have.property('data').which.to.have.property('data',{a:1});
+      },
+      (error)=>assert.fail(0, 1, error),
+      done
+    );
+  }
 });

@@ -28,7 +28,7 @@ const completed = completed => {
 //]]]
 //[[[ Auth
 export const vaultAuthLookupSelfEpic = (action$, store) => 
-  _(action$.ofType(VAULT_AUTH_LOOKUP_SELF))
+  (action$.ofType(VAULT_AUTH_LOOKUP_SELF))
   .mergeMap(
     action =>
       vaultObservable.auth.token.lookupSelf(store.getState().vault)

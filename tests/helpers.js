@@ -11,6 +11,7 @@ const VAULT_HOST = 'http://127.0.0.1:8200';
 global.nock = require('nock');
 global.vaultObservable = require('../src/vault-observable');
 global.expect = require('chai').expect;
+global.assert = require('chai').assert;
 
 global.vault = {
   uri: VAULT_HOST,
@@ -37,3 +38,22 @@ global.storeFactory = () => createStore(
 
 global.delay = delay;
 global.rootEpic = rootEpic;
+
+global.vault = {
+    url: null,
+    auth: {
+      token: null
+    },
+    secret: {
+      generic: {
+        mount: null
+      }
+    }
+  };
+
+global.initVault=function(){
+    vault.auth.token = process.env.VAULT_TOKEN;
+    if (!vault.auth.token) throw Error('VAULT_TOKEN env variable is not set');
+    vault.url = process.env.VAULT_ADDR;
+    if (!vault.url) throw Error('VAULT_ADDR env variable is not set');
+  };

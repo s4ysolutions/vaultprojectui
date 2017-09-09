@@ -61,9 +61,9 @@ export const SecretsDrawer = compose(
   withRouter,
   connect(
     state=>({ }),
-    (dispatch, { history })=>({
-      handleGenericBackendTapped: ()=>history.push('/secrets/generic'),
-      handleConsulBackendTapped: ()=>history.push('/secrets/consul')
+    (dispatch, { history, match })=>({
+      handleGenericBackendTapped: ()=>history.push(match.path + '/generic'),
+      handleConsulBackendTapped: ()=>history.push(match.path + '/consul')
     }))
 )(_SecretsDrawer);
 
@@ -72,8 +72,8 @@ export const SecretsTitle = ()=> <Typography type="title" color="inherit">Secret
 
 const _Secret = () => 
   <Switch>
-    <Route path="/secrets/generic"><SecretGeneric/></Route>
-    <Route path="/secrets/consul"><div>Consul</div></Route>
+    <Route path="/secret/generic"><SecretGeneric/></Route>
+    <Route path="/secret/consul"><div>Consul</div></Route>
   </Switch>;
 
 

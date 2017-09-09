@@ -2,7 +2,8 @@
 import { combineEpics } from 'redux-observable';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/mergeMap';
-import 'rxjs/add/operator/mapTo';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/do';
 import 'rxjs/add/observable/of';
 import vaultObservable from './vault-observable';
 
@@ -27,7 +28,7 @@ const completed = completed => {
 //]]]
 //[[[ Auth
 export const vaultAuthLookupSelfEpic = (action$, store) => 
-  action$.ofType(VAULT_AUTH_LOOKUP_SELF)
+  _(action$.ofType(VAULT_AUTH_LOOKUP_SELF))
   .mergeMap(
     action =>
       vaultObservable.auth.token.lookupSelf(store.getState().vault)
@@ -51,7 +52,7 @@ export const vaultSecretGenericPutEpic = (action$, store) =>
   action$.ofType(VAULT_SECRET_GENERIC_PUT)
   .mergeMap(
     action =>
-      vaultObservable.secret.generic.put(store.getState().vault, action.data)
+      vaultObservable.secret.generic.put(store.getState().vault, action.path, action.kvs)
       .map(payload=>vaultCompleted(payload, action))
   ) 
   .do(completed);

@@ -37,7 +37,7 @@ describe('Epics', function(){
         expect(a).to.have.property('type', VAULT_COMPLETED),
         expect(a).to.have.property('payload').which.to.have.property('data');
       },
-      ()=>expect.fail,
+      (error)=>assert.fail(0, 1, error),
       done
     );
   });
@@ -50,7 +50,7 @@ describe('Epics', function(){
         expect(a).to.have.property('type', VAULT_COMPLETED);
         expect(a).to.have.property('payload').which.to.have.property('errors');
       },
-      ()=>expect.fail,
+      (error)=>assert.fail(0, 1, error),
       done
     );
   });
@@ -65,7 +65,7 @@ describe('Epics', function(){
         expect(a).to.have.property('type', VAULT_COMPLETED);
         expect(a).to.have.property('payload').which.to.have.property('errors');
       },
-      ()=>expect.fail,
+      (error)=>assert.fail(0, 1, error),
       done
     );
   });

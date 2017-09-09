@@ -1,8 +1,9 @@
 const gate = require('../gate');
+const _ = o => (console.log(o), o);// eslint-disable-line no-console, no-unused-vars
 
 module.exports = {
-  get: (vault, path)=> gate.get('/secret' + path, vault),
-  put: (vault, path, data)=> gate.put('/secret' + path, vault, data),
-  post: (vault, path, data)=> gate.post('/secret' + path, vault, data),
-  list: (vault, path)=> gate.list('/secret' + path, vault)
+  get: (path, config)=> gate.get(config.secret.generic.mount + path, config),
+  put: (path, config, kvs)=> gate.put(config.secret.generic.mount + path, config, kvs),
+  post: (path, config, data)=> gate.post(config.secret.generic.mount + path, config, data),
+  list: (path, config)=> gate.list(config.secret.generic.mount + path, config)
 };

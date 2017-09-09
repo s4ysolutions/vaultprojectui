@@ -17,7 +17,7 @@ import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
-import Secrets, { SecretsDrawer, SecretsTitle } from './secrets';
+import Secrets, { SecretsDrawer, SecretsTitle } from './secret';
 import Polices, { PolicesDrawer, PolicesTitle } from './polices';
 import Grants, { GrantsDrawer, GrantsTitle } from './grants';
 
@@ -101,13 +101,6 @@ const styles = theme => ({
 });
 //]]]
 // [[[ _Authentificated
-/*
-            <Route path="/secrets"><span>AAAA</span></Route>
-            <Route path="/polices"><PolicesTitle/></Route>
-            <Route path="/grants"><GrantsTitle/></Route>
-
-
-*/
 const _Authentificated = ({ lastTab, classes, handleDrawerOpen, handleDrawerClose, isDrawerOpen, handleExit }) => 
   <div className={classes.appFrame}>
     <AppBar className={classNames(classes.appBar, isDrawerOpen && classes.appBarShift)}>
@@ -121,7 +114,7 @@ const _Authentificated = ({ lastTab, classes, handleDrawerOpen, handleDrawerClos
           <MenuIcon />
         </IconButton>
         <Switch>
-          <Route path="/secrets"><SecretsTitle/></Route>
+          <Route path="/secret"><SecretsTitle/></Route>
           <Route path="/polices"><PolicesTitle/></Route>
           <Route path="/grants"><GrantsTitle/></Route>
         </Switch>
@@ -142,7 +135,7 @@ const _Authentificated = ({ lastTab, classes, handleDrawerOpen, handleDrawerClos
         </div>
         <Divider />
         <Switch>
-          <Route path="/secrets"><SecretsDrawer classes={classes}/></Route>
+          <Route path="/secret"><SecretsDrawer classes={classes}/></Route>
           <Route path="/polices"><PolicesDrawer classes={classes}/></Route>
           <Route path="/grants"><GrantsDrawer classes={classes}/></Route>
         </Switch>
@@ -159,7 +152,7 @@ const _Authentificated = ({ lastTab, classes, handleDrawerOpen, handleDrawerClos
     </Drawer>
     <main className={classNames(classes.content, isDrawerOpen && classes.contentShift)}>
       <Switch>
-        <Route path="/secrets"><Secrets/></Route>
+        <Route path="/secret"><Secrets/></Route>
         <Route path="/polices"><Polices/></Route>
         <Route path="/grants"><Grants/></Route>
         <Redirect from="/" to={lastTab}/>

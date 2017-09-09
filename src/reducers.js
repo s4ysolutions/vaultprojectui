@@ -48,12 +48,13 @@ const messages = (state = initMessages, action) => {
 //]]]
 //[[[ Vault
 const initVault = {
-  url: 'http://127.0.0.1:8200',
+  url: typeof window !== 'undefined' && window.location.hostname.indexOf('amazon') > 0 ? 'http://dev2.s4y.solutions:8200' : 'http://127.0.0.1:8200',
   auth: {
-    token: null
+    token: typeof window !== 'undefined' && window.location.hostname.indexOf('amazon') > 0 ? '0fdbccde-b6ad-a3cc-412f-60a2b26e1b1c' : null
   },
   secret: {
     generic: {
+      mount: '/secret'
     },
     consul: {
     }

@@ -51,6 +51,9 @@
     "vaultObservable": true,
     "storeFactory": true,
     "rootEpic": true,
+    "assert": true,
+    "vault": true,
+    "initVault": true,
 		"expect": true
 	}
 }

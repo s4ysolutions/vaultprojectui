@@ -21,7 +21,7 @@ describe('Epics', function(){
     store = storeFactory();
     nock.disableNetConnect();
   });
-  it('lookup-self token', function(done){
+  it.only('lookup-self token', function(done){
     const URL = '/v1/auth/token/lookup-self';
     nocker.get(URL).reply(200, {
       'data': {
@@ -39,15 +39,19 @@ describe('Epics', function(){
         'num_uses': 0,
       }
     });
-
+let get=0;
     rootEpic(ActionsObservable.of(vaultAuthLookupSelf()), store)
     .subscribe( 
       a=>{
         expect(a).to.have.property('type', VAULT_COMPLETED),
         expect(a).to.have.property('payload').which.to.have.property('data');
+        get++;
       },
       (error)=>assert.fail(0, 1, error),
-      done
+      ()=>{
+        expect(get).to.be.eql(1);
+        done();
+      }
     );
   });
   it('lookup-self error', function(done){

@@ -2,7 +2,7 @@ import u from 'update-immutable';
 import * as A from './actions';
 //[[[ Persistent
 const initPersistent = {
-  lastTab: '/secrets/generic'
+  lastTab: '/secret/generic'
 };
 
 const persistent = (state = initPersistent, action) => {

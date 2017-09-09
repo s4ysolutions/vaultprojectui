@@ -19,8 +19,6 @@ global.vault = {
     token: 'token'
   }
 };
-// need to test DNS errros
-// nock.disableNetConnect();
 global.nocker = nock(VAULT_HOST);
 
 

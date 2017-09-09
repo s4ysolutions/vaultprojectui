@@ -19,6 +19,7 @@ describe('Epics', function(){
   beforeEach(()=> {
     nock.cleanAll();
     store = storeFactory();
+    nock.disableNetConnect();
   });
   it('lookup-self token', function(done){
     const URL = '/v1/auth/token/lookup-self';
@@ -63,6 +64,8 @@ describe('Epics', function(){
     );
   });
   it('lookup-self DNS error', function(done){
+    before(()=>nock.enableNetConnect());
+    after(()=>nock.disableNetConnect());
     this.timeout(15000);
     store.dispatch(vaultSetURL('http://samele.nonexisting'));
     const URI = '/v1/auth/token/lookup-self';
@@ -77,21 +80,47 @@ describe('Epics', function(){
       done
     );
   });
-  it.only('secret read', function(done){
-    const URL = '/v1/auth/secret/foo';
+  it('secret read', function(done){
+    const URL = '/v1/secret/foo';
     nocker.get(URL).reply(200, {
-      'data': {
-        {a: 1}
-      }
+        data: {
+          a: 1
+        }
     });
+    let get=0;
     rootEpic(ActionsObservable.of(vaultSecretGenericGet('/foo')), store)
     .subscribe( 
       a=>{
         expect(a).to.have.property('type', VAULT_COMPLETED),
-        expect(a).to.have.property('payload').which.to.have.property('data').which.to.have.property('data',{a:1});
+        expect(a).to.have.property('payload').which.to.have.property('data').which.to.have.property('data');
+        expect(a.payload.data.data).to.be.eql({a:1});
+        get++;
+      },
+      error=>assert.fail(0, 1, error),
+      ()=>{
+        expect(get).to.be.eql(1);
+        done();
+      }
+    );
+  });
+  it('secret put', function(done){
+    const URL = '/v1/secret/foo';
+    nocker.put(URL).reply(200, {
+      'data': ""
+    });
+    let get=0;
+    rootEpic(ActionsObservable.of(vaultSecretGenericPut('/foo')), store)
+    .subscribe( 
+      a=>{
+        expect(a).to.have.property('type', VAULT_COMPLETED),
+        expect(a).to.have.property('payload').which.to.have.property('data').which.to.have.property('data',"");
+        get++;
       },
       (error)=>assert.fail(0, 1, error),
-      done
+      ()=>{
+        expect(get).to.be.eql(1);
+        done();
+      }
     );
-  }
+  })
 });

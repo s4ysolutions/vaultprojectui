@@ -61,7 +61,7 @@ export const vaultSecretGenericList = (alwaysOrSuccess, fail) => ({
 });
 export const VAULT_SECRET_GENERIC_GET = 'VAULT_SECRET_GENERIC_GET';
 export const vaultSecretGenericGet = (path, alwaysOrSuccess, fail) => ({
-  type: VAULT_SECRET_GENERIC_LIST,
+  type: VAULT_SECRET_GENERIC_GET,
   path,
   always: !fail && alwaysOrSuccess,
   success: fail && alwaysOrSuccess,

@@ -10,32 +10,40 @@ import { connect } from 'react-redux';
 import Login from './visitor/login';
 import Authentificated from './authentificated';
 
-const _ = o=>(console.log(o), o);
+const _ = o => (console.log(o), o);
 
 const muiTheme = createMuiTheme({
   palette: createPalette({
     type: 'light'
   })
 });
-const ProtectedRoute = ({ isAllowed, ...props }) => isAllowed ? <Route {...props}/> : <Redirect to="/authentificate"/>;
+const ProtectedRoute = ({ isAllowed, ...props }) =>
+  isAllowed ? <Route {...props} /> : <Redirect to="/authentificate" />;
 ProtectedRoute.propTypes = {
   isAllowed: PropTypes.bool.isRequired,
   component: PropTypes.func.isRequired
 };
 
-const _App = ({ isTokenVerified })=> 
+const _App = ({ isTokenVerified }) => (
   <MuiThemeProvider theme={muiTheme}>
     <Switch>
-      <Route exact path="/authentificate" component={Login}/>
-      <ProtectedRoute isAllowed={isTokenVerified} path="/" component={Authentificated}/>
+      <Route exact path="/authentificate" component={Login} />
+      <ProtectedRoute
+        isAllowed={isTokenVerified}
+        path="/"
+        component={Authentificated}
+      />
     </Switch>
-  </MuiThemeProvider>;
+  </MuiThemeProvider>
+);
 
 _App.propTypes = {
   isTokenVerified: PropTypes.bool.isRequired
 };
 
-const App = withRouter(connect(state=>({
-  isTokenVerified: state.transient.isTokenVerified
-}))(_App));
+const App = withRouter(
+  connect(state => ({
+    isTokenVerified: state.vaultState.isTokenVerified
+  }))(_App)
+);
 export default App;

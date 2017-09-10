@@ -34,7 +34,7 @@ const createEpic = (actionType, firstOp) => (action$, store) =>
   action$
     .ofType(actionType)
     .mergeMap(action =>
-      firstOp(action, store.getState().vault, store).map(payload =>
+      firstOp(action, store.getState().vaultConfig, store).map(payload =>
         vaultCompleted(payload, action)
       )
     )
@@ -63,7 +63,7 @@ export const vaultSecretGenericListEpic = (action$, store) =>
     .ofType(VAULT_SECRET_GENERIC_LIST)
     .mergeMap(action =>
       vaultObservable.secret.generic
-        .list(store.getState().vault)
+        .list(store.getState().vaultConfig)
         .map(payload => vaultCompleted(payload, action))
     )
     .do(completed);

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/start-ssr.native",
-    "test": "mocha --compilers js:babel-register --require ./tests/helpers --reporter spec **/*.test.js",
+    "test": "VAULT_TOKEN=1d665f78-405f-2528-0d1b-49da2386c54c VAULT_ADDR='http://127.0.0.1:8200' mocha --compilers js:babel-register --require ./tests/helpers --reporter spec **/*.test.js",
     "build": "run-s clean build:static build:ssr",
     "clean": "rm -rf dist",
     "fix": "eslint --fix --ext .jsx src/index.jsx",
@@ -59,6 +59,8 @@
     "webpack-merge": "4.1.0"
   },
   "dependencies": {
+    "@devexpress/dx-react-core": "1.0.0-alpha.9",
+    "@devexpress/dx-react-grid": "1.0.0-alpha.9",
     "ejs": "2.5.7",
     "koa": "2.3.0",
     "koa-static-cache": "5.1.1",

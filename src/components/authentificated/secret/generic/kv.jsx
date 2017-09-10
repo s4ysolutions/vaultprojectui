@@ -98,9 +98,9 @@ const KvForm = compose(
   withRouter,
   connect((state, { match: { path }, location: { pathname } }) => ({
     path: pathname.slice(path.length),
-    errors: state.messages.vaultErrors,
+    errors: state.messages.errors,
     isAllowedMount: false,
-    mount: state.vault.secret.generic.mount,
+    mount: state.vaultConfig.secret.generic.mount,
     initialValues: {
       key: '',
       value: ''
@@ -109,7 +109,7 @@ const KvForm = compose(
   reduxForm({
     form: 'secret_generic_kv',
     validate: values => {
-      void(values);
+      void values;
       const errors = {};
       return errors;
     },

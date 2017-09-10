@@ -18,7 +18,7 @@ _Errors.propTypes = {
 };
 
 const Errors = connect(state => ({
-  errors: state.messages.vaultErrors
+  errors: state.messages.errors
 }))(_Errors);
 
 export default Errors;

@@ -13,7 +13,7 @@ global.vaultObservable = require('../src/vault-observable');
 global.expect = require('chai').expect;
 global.assert = require('chai').assert;
 
-global.vault = {
+global.vaultConfig = {
   uri: VAULT_HOST,
   auth: {
     token: 'token'
@@ -21,37 +21,36 @@ global.vault = {
 };
 global.nocker = nock(VAULT_HOST);
 
-
-global.storeFactory = () => createStore(
-  combineReducers({
-    ...reducers,
-    form: formReducer
-  }),
-  compose(
-    applyMiddleware(
-      createEpicMiddleware(rootEpic)
-    )
-  )
-);
+global.storeFactory = () =>
+  createStore(
+    combineReducers({
+      ...reducers,
+      form: formReducer
+    }),
+    compose(applyMiddleware(createEpicMiddleware(rootEpic)))
+  );
 
 global.delay = delay;
 global.rootEpic = rootEpic;
 
-global.vault = {
-    url: null,
-    auth: {
-      token: null
-    },
-    secret: {
-      generic: {
-        mount: null
-      }
+global.vaultConfig = {
+  url: null,
+  auth: {
+    token: null
+  },
+  secret: {
+    generic: {
+      mount: '/secret'
     }
-  };
+  }
+};
 
-global.initVault=function(){
-    vault.auth.token = process.env.VAULT_TOKEN;
-    if (!vault.auth.token) throw Error('VAULT_TOKEN env variable is not set');
-    vault.url = process.env.VAULT_ADDR;
-    if (!vault.url) throw Error('VAULT_ADDR env variable is not set');
-  };
+global.initVault = function() {
+  vaultConfig.auth.token = process.env.VAULT_TOKEN;
+  if (!vaultConfig.auth.token)
+    throw Error('VAULT_TOKEN env variable is not set');
+  vaultConfig.url = process.env.VAULT_ADDR;
+  if (!vaultConfig.url) throw Error('VAULT_ADDR env variable is not set');
+  vaultConfig.secret.generic.mount =
+    process.env.VAULT_SECRET_GENERIC_MOUNT || vaultConfig.secret.generic.mount;
+};

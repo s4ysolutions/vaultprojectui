@@ -1,14 +1,14 @@
 import { vaultSetURL } from '../src/actions';
 
-describe('Sync redux', function(){
+describe('Sync redux', function() {
   let store;
-  beforeEach(()=> {
+  beforeEach(() => {
     store = storeFactory();
   });
-  describe('Vault', function(){
-    it('Set URL', function(){
+  describe('Vault', function() {
+    it('Set URL', function() {
       store.dispatch(vaultSetURL('test'));
-      expect(store.getState().vault.url).to.be.equal('test');
+      expect(store.getState().vaultConfig.url).to.be.equal('test');
     });
   });
 });

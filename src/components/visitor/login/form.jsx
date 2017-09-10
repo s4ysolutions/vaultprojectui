@@ -74,8 +74,8 @@ export default compose(
   withStyles(styles),
   connect(state => ({
     initialValues: {
-      url: state.vault.url,
-      token: state.vault.auth.token
+      url: state.vaultConfig.url,
+      token: state.vaultConfig.auth.token
     }
   })),
   withRouter,

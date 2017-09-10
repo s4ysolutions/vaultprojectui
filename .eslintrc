@@ -46,7 +46,7 @@
 		"module": true,
     "nocker": true,
     "nock": true,
-    "vault": true,
+    "vaultConfig": true,
     "delay": true,
     "vaultObservable": true,
     "storeFactory": true,

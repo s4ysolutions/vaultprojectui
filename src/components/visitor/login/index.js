@@ -8,21 +8,23 @@ import LoginForm from './form';
 
 const _ = o => (console.log(o), o);
 
-const _LoginPage = ({ isQuerying }) =>
-  <Media query="(max-width: 601px)">{
-    matched =>
+const _LoginPage = ({ isQuerying }) => (
+  <Media query="(max-width: 601px)">
+    {matched => (
       <Dialog open={true} fullScreen={matched}>
         <DialogTitle>Authentificate</DialogTitle>
-        <LoginForm/>
-        {isQuerying && <LinearProgress/>}
+        <LoginForm />
+        {isQuerying && <LinearProgress />}
       </Dialog>
-  }
+    )}
   </Media>
-  ;
+);
 
 _LoginPage.propTypes = {
   isQuerying: PropTypes.bool
 };
 
-const LoginPage = connect(state=>({ isQuerying: state.transient.isVaultQuerying }))(_LoginPage);
+const LoginPage = connect(state => ({
+  isQuerying: state.vaultState.isVaultQuerying
+}))(_LoginPage);
 export default LoginPage;

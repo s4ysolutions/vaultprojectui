@@ -21,7 +21,7 @@ describe('Epics', function(){
     store = storeFactory();
     nock.disableNetConnect();
   });
-  it.only('lookup-self token', function(done){
+  it('lookup-self token', function(done){
     const URL = '/v1/auth/token/lookup-self';
     nocker.get(URL).reply(200, {
       'data': {

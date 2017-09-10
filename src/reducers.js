@@ -28,7 +28,7 @@ const transient = (state = initTransient, action) => {
       return {
         ...state,
         isVaultQuerying: false,
-        isTokenVerified: (action.action.type === A.VAULT_AUTH_LOOKUP_SELF)
+        isTokenVerified: action.action.type === A.VAULT_AUTH_LOOKUP_SELF?true:state.isTokenVerified
       };
   }
   return state;

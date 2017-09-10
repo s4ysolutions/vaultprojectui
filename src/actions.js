@@ -1,7 +1,9 @@
+// eslint-disable-next-line no-console, no-unused-vars
+const _ = o => (console.log(o), o);
 //[[[ Noop
 export const ACTION_NOOP = 'ACTION_NOOP';
 export const actionNoop = () => ({
-  type: ACTION_NOOP,
+  type: ACTION_NOOP
 });
 //]]]
 //[[[ Transient UI
@@ -37,7 +39,7 @@ export const vaultExit = () => ({
 });
 
 export const VAULT_AUTH_SET_TOKEN = 'VAULT_AUTH_SET_TOKEN';
-export const vaultAuthSetToken = (token) => ({
+export const vaultAuthSetToken = token => ({
   type: VAULT_AUTH_SET_TOKEN,
   token
 });
@@ -68,14 +70,15 @@ export const vaultSecretGenericGet = (path, alwaysOrSuccess, fail) => ({
   fail: fail
 });
 export const VAULT_SECRET_GENERIC_PUT = 'VAULT_SECRET_GENERIC_PUT';
-export const vaultSecretGenericPut = (path, kvs, alwaysOrSuccess, fail) => ({
-  type: VAULT_SECRET_GENERIC_PUT,
-  path,
-  kvs,
-  always: !fail && alwaysOrSuccess,
-  success: fail && alwaysOrSuccess,
-  fail: fail
-});
+export const vaultSecretGenericPut = (path, kvs, alwaysOrSuccess, fail) =>
+  ({
+    type: VAULT_SECRET_GENERIC_PUT,
+    path,
+    kvs,
+    always: !fail && alwaysOrSuccess,
+    success: fail && alwaysOrSuccess,
+    fail: fail
+  });
 //]]]
 //]]]
 //]]]

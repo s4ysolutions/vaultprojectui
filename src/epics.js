@@ -16,31 +16,36 @@ import {
   vaultSecretGenericList,
   vaultSecretGenericPut,
   vaultCompleted,
-  vaultError }
-  from './actions';
+  vaultError
+} from './actions';
 //]]]
 //[[[ Utils
+// eslint-disable-next-line no-console, no-unused-vars
 const _ = o => (console.log(o), o);
 const completed = completed => {
   if (completed.action.always) return completed.action.always(completed);
-  if (completed.payload.errors && completed.action.fail) return completed.action.fail(completed);
-  if (completed.payload.data && completed.action.success) return completed.action.success(completed);
+  if (undefined !== completed.payload.errors && completed.action.fail)
+    return completed.action.fail(completed);
+  if (undefined !== completed.payload.data && completed.action.success)
+    return completed.action.success(completed);
   return null;
 };
-const createEpic=(action, firstOp)=>(action$,store)=>
-action$.ofType(action)
-.mergeMap(
-  action=>firstOp(action, store.getState().vault, store)
-      .map(payload=>vaultCompleted(payload, action))
-  ) 
-  .do(completed);
+const createEpic = (actionType, firstOp) => (action$, store) =>
+  action$
+    .ofType(actionType)
+    .mergeMap(action =>
+      firstOp(action, store.getState().vault, store).map(payload =>
+        vaultCompleted(payload, action)
+      )
+    )
+    .do(completed);
 //]]]
 //[[[ Auth
 export const vaultAuthLookupSelfEpic = createEpic(
   VAULT_AUTH_LOOKUP_SELF,
-  (action,vault)=>vaultObservable.auth.token.lookupSelf(vault)
+  (action, vault) => vaultObservable.auth.token.lookupSelf(vault)
 );
- /* 
+/* 
   (action$, store) => 
   (action$.ofType(VAULT_AUTH_LOOKUP_SELF))
   .mergeMap(
@@ -54,27 +59,29 @@ export const vaultAuthLookupSelfEpic = createEpic(
 //[[[ Secret
 //[[[ Generic
 export const vaultSecretGenericListEpic = (action$, store) =>
-  action$.ofType(VAULT_SECRET_GENERIC_LIST)
-  .mergeMap(
-    action =>
-      vaultObservable.secret.generic.list(store.getState().vault)
-      .map(payload=>vaultCompleted(payload, action))
-  ) 
-  .do(completed);
+  action$
+    .ofType(VAULT_SECRET_GENERIC_LIST)
+    .mergeMap(action =>
+      vaultObservable.secret.generic
+        .list(store.getState().vault)
+        .map(payload => vaultCompleted(payload, action))
+    )
+    .do(completed);
 
 export const vaultSecretGenericPutEpic = createEpic(
   VAULT_SECRET_GENERIC_PUT,
-  (action,vault)=>vaultObservable.secret.generic.put(action.path,vault,action.kvs)
-)
+  (action, vault) =>
+    vaultObservable.secret.generic.put(action.path, vault, action.kvs)
+);
 
 export const vaultSecretGenericGetEpic = createEpic(
   VAULT_SECRET_GENERIC_GET,
-  (action,vault)=>vaultObservable.secret.generic.get(action.path,vault)
-)
+  (action, vault) => vaultObservable.secret.generic.get(action.path, vault)
+);
 //]]]
 //]]]
 export default combineEpics(
-//  vaultAuthSetTokenEpic,
+  //  vaultAuthSetTokenEpic,
   vaultAuthLookupSelfEpic,
   vaultSecretGenericGetEpic,
   vaultSecretGenericPutEpic

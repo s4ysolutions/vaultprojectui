@@ -2,7 +2,8 @@ const superagent = require('superagent');
 const Observable = require('rxjs/Observable').Observable;
 require('rxjs/add/observable/fromPromise');
 
-const _ = o => (console.log(o), o); // eslint-disable-line no-console, no-unused-vars
+// eslint-disable-next-line no-console, no-unused-vars
+const _ = o => (console.log(o), o);
 
 const wrap = (request, token, data) =>
   Observable.fromPromise(
@@ -11,7 +12,9 @@ const wrap = (request, token, data) =>
       .set('Accept', 'application/json')
       .send(data)
       .then(
-        res => ({ data: res.type == 'application/json' ? res.body : res.text }),
+        res => ({
+          data: res.type == 'application/json' ? res.body : res.text
+        }),
         error => ({
           errors: (error.response &&
             error.response.type &&

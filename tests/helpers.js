@@ -54,3 +54,4 @@ global.initVault = function() {
   vaultConfig.secret.generic.mount =
     process.env.VAULT_SECRET_GENERIC_MOUNT || vaultConfig.secret.generic.mount;
 };
+

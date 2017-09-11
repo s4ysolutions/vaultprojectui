@@ -1,5 +1,7 @@
 import u from 'update-immutable';
 import * as A from './actions';
+// eslint-disable-next-line no-console, no-unused-vars
+const _ = o => (console.log(o), o);
 //[[[ Persistent
 const initPersistent = {
   lastTab: '/secret/generic'
@@ -42,7 +44,16 @@ const messages = (state = initMessages, action) => {
 //[[[ Vault
 const initVaultState = {
   isTokenVerified: false,
-  isVaultQuerying: false
+  isVaultQuerying: false,
+  cache: {
+    secret: {
+      generic: {
+        folders: {
+          '/': null
+        }
+      }
+    }
+  }
 };
 
 const vaultState = (state = initVaultState, action) => {
@@ -52,14 +63,26 @@ const vaultState = (state = initVaultState, action) => {
     case A.VAULT_AUTH_LOOKUP_SELF:
       return { ...state, isVaultQuerying: true };
     case A.VAULT_COMPLETED:
-      return {
-        ...state,
-        isVaultQuerying: false,
-        isTokenVerified:
-          action.action.type === A.VAULT_AUTH_LOOKUP_SELF
-            ? true
-            : state.isTokenVerified
-      };
+      switch (action.action.type) {
+        case A.VAULT_AUTH_LOOKUP_SELF:
+          return { ...state, isVaultQuerying: false, isTokenVerified: true };
+        case A.VAULT_SECRET_GENERIC_LIST:
+          return {
+            ...state,
+            isVaultQuerying: false,
+            cache: u(state.cache, {
+              secret: {
+                generic: {
+                  folders: {
+                    [action.action.path]: {
+                      $set: action.payload.data.data.keys
+                    }
+                  }
+                }
+              }
+            })
+          };
+      }
   }
   return state;
 };

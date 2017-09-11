@@ -55,8 +55,9 @@ export const vaultAuthLookupSelf = (alwaysOrSuccess, fail) => ({
 //[[[ Secret
 //[[[ Generic
 export const VAULT_SECRET_GENERIC_LIST = 'VAULT_SECRET_GENERIC_LIST';
-export const vaultSecretGenericList = (alwaysOrSuccess, fail) => ({
+export const vaultSecretGenericList = (path, alwaysOrSuccess, fail) => ({
   type: VAULT_SECRET_GENERIC_LIST,
+  path,
   always: !fail && alwaysOrSuccess,
   success: fail && alwaysOrSuccess,
   fail: fail
@@ -70,15 +71,14 @@ export const vaultSecretGenericGet = (path, alwaysOrSuccess, fail) => ({
   fail: fail
 });
 export const VAULT_SECRET_GENERIC_PUT = 'VAULT_SECRET_GENERIC_PUT';
-export const vaultSecretGenericPut = (path, kvs, alwaysOrSuccess, fail) =>
-  ({
-    type: VAULT_SECRET_GENERIC_PUT,
-    path,
-    kvs,
-    always: !fail && alwaysOrSuccess,
-    success: fail && alwaysOrSuccess,
-    fail: fail
-  });
+export const vaultSecretGenericPut = (path, kvs, alwaysOrSuccess, fail) => ({
+  type: VAULT_SECRET_GENERIC_PUT,
+  path,
+  kvs,
+  always: !fail && alwaysOrSuccess,
+  success: fail && alwaysOrSuccess,
+  fail: fail
+});
 //]]]
 //]]]
 //]]]

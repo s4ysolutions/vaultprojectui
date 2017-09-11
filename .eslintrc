@@ -22,7 +22,7 @@
 		"react","async-await","mocha"
 	],
 	"rules": {
-		"space-infix-ops": ["error"],
+		"space-infix-ops": ["warn"],
 		"require-await": "error",
 		"no-return-await": "error",
 		// Disable `no-console` rule

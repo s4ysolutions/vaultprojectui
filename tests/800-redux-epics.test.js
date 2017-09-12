@@ -1,5 +1,6 @@
 const {
   vaultSecretGenericList,
+  vaultSecretGenericPut,
   vaultSetURL,
   vaultAuthSetToken,
   VAULT_SECRET_GENERIC_LIST
@@ -7,7 +8,10 @@ const {
 
 describe('Epics Redux', function() {
   let store;
-  before(initVault);
+  before(function() {
+    initVault();
+    nock.disableNetConnect();
+  });
   beforeEach(() => {
     store = storeFactory();
     store.dispatch(vaultSetURL(vaultConfig.url));
@@ -38,6 +42,24 @@ describe('Epics Redux', function() {
               .folders;
             //console.log(folders);
             expect(folders['/']).to.be.eql(['first', 'second']);
+            done();
+          }, 0);
+        })
+      );
+    });
+    it('PUT secret/generic folder', function(done) {
+      nocker.put('/v1/secret/x').reply(204, '');
+      store.dispatch(
+        vaultSecretGenericPut('/x', { ttl: '1m' }, action => {
+          console.log(action);
+          expect(action)
+            .to.have.property('payload')
+            .which.have.property('data', '');
+          setTimeout(() => {
+            const folders = store.getState().vaultState.cache.secret.generic
+              .folders;
+            console.log(folders);
+            expect(folders['/']).to.be.eql(['x']);
             done();
           }, 0);
         })

@@ -8,6 +8,7 @@ const initPersistent = {
 };
 
 const persistent = (state = initPersistent, action) => {
+  void action;
   return state;
 };
 
@@ -46,6 +47,7 @@ const initVaultState = {
   isTokenVerified: false,
   isVaultQuerying: false,
   cache: {
+    edit_folder: false,
     secret: {
       generic: {
         folders: {

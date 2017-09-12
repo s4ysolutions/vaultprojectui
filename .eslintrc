@@ -53,6 +53,7 @@
     "rootEpic": true,
     "assert": true,
     "initVault": true,
+    "chai": true,
 		"expect": true
 	}
 }

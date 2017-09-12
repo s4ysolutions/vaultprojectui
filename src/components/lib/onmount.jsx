@@ -18,4 +18,4 @@ const onMount = action => WrappedComponent => {
   };
 };
 
-export default OnMount;
+export default onMount;

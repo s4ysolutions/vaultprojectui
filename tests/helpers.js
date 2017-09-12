@@ -10,8 +10,9 @@ import delay from '../src/lib/delay';
 const VAULT_HOST = 'http://127.0.0.1:8200';
 global.nock = require('nock');
 global.vaultObservable = require('../src/vault-observable');
-global.expect = require('chai').expect;
-global.assert = require('chai').assert;
+global.chai = require('chai');
+global.expect = chai.expect;
+global.assert = chai.assert;
 
 global.vaultConfig = {
   uri: VAULT_HOST,

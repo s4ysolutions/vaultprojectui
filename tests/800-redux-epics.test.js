@@ -2,8 +2,7 @@ const {
   vaultSecretGenericList,
   vaultSecretGenericPut,
   vaultSetURL,
-  vaultAuthSetToken,
-  VAULT_SECRET_GENERIC_LIST
+  vaultAuthSetToken
 } = require('../src/actions');
 
 describe('Epics Redux', function() {
@@ -47,18 +46,16 @@ describe('Epics Redux', function() {
         })
       );
     });
-    it('PUT secret/generic folder', function(done) {
+    it('PUT secret/x folder', function(done) {
       nocker.put('/v1/secret/x').reply(204, '');
       store.dispatch(
-        vaultSecretGenericPut('/x', { ttl: '1m' }, action => {
-          console.log(action);
+        vaultSecretGenericPut('/x', { a:1, b:2, ttl: '1m' }, action => {
           expect(action)
             .to.have.property('payload')
             .which.have.property('data', '');
           setTimeout(() => {
             const folders = store.getState().vaultState.cache.secret.generic
               .folders;
-            console.log(folders);
             expect(folders['/']).to.be.eql(['x']);
             done();
           }, 0);

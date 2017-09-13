@@ -1,10 +1,62 @@
-import u from 'update-immutable';
-import * as A from './actions';
+import u from "update-immutable";
+import * as A from "./actions";
 // eslint-disable-next-line no-console, no-unused-vars
 const _ = o => (console.log(o), o);
-//[[[ Persistent
+//[[[ KVs
+const DEFAULT_KVS = {};
+const initKVs = {
+  kvs: DEFAULT_KVS,
+  addingAt: 0,
+  editingKey: false
+};
+
+const kvs = (state = initKVs, action) => {
+  switch (action.type) {
+    case A.VAULT_COMPLETED:
+      if (action.action.type === A.VAULT_SECRET_GENERIC_GET) {
+        const kvs = action.payload.data.data;
+        const editingKey =
+          undefined !== kvs[state.editingKey] && state.editingKey;
+        const l = Object.entries(kvs).length;
+        const addingAt = editingKey === false && (l === 0 ? 0 : l - 1);
+        return {
+          ...state,
+          kvs,
+          editingKey,
+          addingAt
+        };
+      }
+      break;
+    case A.KV_START_ADD_AT:
+      const kl=Object.keys(state.kvs).length;
+      return {
+        ...state,
+        addingAt:
+          action.pos < Object.keys(state.kvs).length
+            ? action.pos
+            : state.kvs.length === 0 ? 0 : state.kvs.length - 1,
+        editingKey: false
+      };
+      break;
+    case A.KV_START_EDIT_OF:
+      return { ...state, addingAt: false, editingKey: action.key };
+      break;
+    case A.KV_DELETE_OF:
+      break;
+    case A.KV_CANCEL_ADD:
+    case A.KV_COMPLETE_EDIT:
+      return {
+        ...state,
+        addingAt: state.kvs.length == 0 ? 0 : state.kvs.length - 1,
+        editingKey: false
+      };
+  }
+  return state;
+};
+//]]]
+//[[[ Transient & Persistent
 const initPersistent = {
-  lastTab: '/secret/generic'
+  lastTab: "/secret/generic"
 };
 
 const persistent = (state = initPersistent, action) => {
@@ -51,7 +103,7 @@ const initVaultState = {
     secret: {
       generic: {
         folders: {
-          '/': null
+          "/": null
         }
       }
     }
@@ -91,20 +143,20 @@ const vaultState = (state = initVaultState, action) => {
 
 const initVaultConfig = {
   url:
-    typeof window !== 'undefined' &&
-    window.location.hostname.indexOf('amazon') > 0
-      ? 'http://dev2.s4y.solutions:8200'
-      : 'http://127.0.0.1:8200',
+    typeof window !== "undefined" &&
+    window.location.hostname.indexOf("amazon") > 0
+      ? "http://dev2.s4y.solutions:8200"
+      : "http://127.0.0.1:8200",
   auth: {
     token:
-      typeof window !== 'undefined' &&
-      window.location.hostname.indexOf('amazon') > 0
-        ? '0fdbccde-b6ad-a3cc-412f-60a2b26e1b1c'
+      typeof window !== "undefined" &&
+      window.location.hostname.indexOf("amazon") > 0
+        ? "0fdbccde-b6ad-a3cc-412f-60a2b26e1b1c"
         : null
   },
   secret: {
     generic: {
-      mount: '/secret'
+      mount: "/secret"
     },
     consul: {}
   }
@@ -123,6 +175,7 @@ const vaultConfig = (state = initVaultConfig, action) => {
 //[[[ export
 export default {
   persistent,
+  kvs,
   transient,
   messages,
   vaultState,

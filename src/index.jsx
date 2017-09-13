@@ -13,29 +13,44 @@ import './style.css';
 import App from './components/app';
 import rootEpic from './epics';
 import reducers from './reducers';
-import store, {  epicMiddleware } from './store';
+import store, { epicMiddleware } from './store';
 
 /*
-import LogRocket from "logrocket";
+Import LogRocket from "logrocket";
 LogRocket.init("ijym8y/vault-project");
 */
 
 
-const render = Component => { ReactDOM.render(
-  <BrowserRouter>
-    <Provider store={store}>
-      <Component/>
-    </Provider>
-  </BrowserRouter>,
-  document.getElementById('reactMount')
-);};
+const render = (Component) => {
 
-persistStore(store, { blacklist: ['form', 'xtransient', 'messages'], keyPrefix: 'vaultproject-ui' }, ()=>render(App));
+  ReactDOM.render(
+      <BrowserRouter>
+        <Provider store={store}>
+          <Component />
+      </Provider>
+    </BrowserRouter>,
+    document.getElementById('reactMount')
+  );
+
+};
+
+persistStore(store, {
+  'blacklist': [
+    'form',
+    'xtransient',
+    'messages'
+  ],
+  'keyPrefix': 'vaultproject-ui'
+}, () => render(App));
 if (module.hot) {
-  module.hot.accept( () => {
+
+  module.hot.accept(() => {
+
     console.log(module.hot);
     epicMiddleware.replaceEpic(rootEpic);
     store.replaceReducer(reducers);
     render(App);
+
   });
+
 }

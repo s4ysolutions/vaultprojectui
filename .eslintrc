@@ -1,7 +1,7 @@
 {
 	// Extend existing configuration
 	// from ESlint and eslint-plugin-react defaults.
-	"extends": [ "eslint:recommended", "plugin:react/recommended" ],
+	"extends": [ "eslint:all", "plugin:react/all"],//, "plugin:react-perf/all" ],
 	"parser": "babel-eslint",
 	"parserOptions": {
 		"ecmaVersion": 2017,
@@ -19,9 +19,17 @@
 	},
 	// Enable custom plugin known as eslint-plugin-react
 	"plugins": [
-		"react","async-await","mocha"
+		"react","async-await","mocha", "react-perf"
 	],
 	"rules": {
+    "max-statements": "off",
+    "one-var": "off",
+    "id-length": "off",
+    "quote-props": "off",
+    "no-empty": "warn",
+    "no-magic-numbers": ["error",{"ignore": [0,1]}],
+    "padded-blocks": "off",
+    "sort-keys": "off",
 		"space-infix-ops": ["warn"],
 		"require-await": "error",
 		"no-return-await": "error",

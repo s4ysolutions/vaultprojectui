@@ -82,3 +82,32 @@ export const vaultSecretGenericPut = (path, kvs, alwaysOrSuccess, fail) => ({
 //]]]
 //]]]
 //]]]
+//[[[ KVs
+export const KV_START_ADD_AT = 'KV_START_ADD_AT';
+export const kvStartAddAt = pos => ({
+  type: KV_START_ADD_AT,
+  pos
+});
+
+export const KV_START_EDIT_OF = 'KV_START_EDIT_OF';
+export const kvStartEditOf = key => ({
+  type: KV_START_EDIT_OF,
+  key
+});
+
+export const KV_DELETE_OF = 'KV_DELETE_OF';
+export const kvDeleteOf = key => ({
+  type: KV_DELETE_OF,
+  key
+});
+
+export const KV_CANCEL_ADD = 'KV_CANCEL_ADD';
+export const kvCancelAdd = () => ({
+  type: KV_CANCEL_ADD
+});
+
+export const KV_COMPLETE_EDIT = 'KV_COMPLETE_EDIT';
+export const kvCompleteEdit = () => ({
+  type: KV_COMPLETE_EDIT
+});
+//]]]

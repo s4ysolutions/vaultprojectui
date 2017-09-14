@@ -1,6 +1,6 @@
 const { kvEditor } = require('../src/machines');
 
-describe.only('FSMs', () => {
+describe('FSMs', () => {
   describe('KVs editor', () => {
     it('empty', (done) => {
       const editor = {};
@@ -19,15 +19,19 @@ describe.only('FSMs', () => {
       expect(editor.state.addingAt).to.be.equal(1);
       expect(editor.state.editingOf).to.be.equal(false);
       kvEditor.addAt(editor, 0);
+      expect(editor.__machina__.kvEditor.state).to.be.equal('addingAt');
       expect(editor.state.addingAt).to.be.equal(0);
       expect(editor.state.editingOf).to.be.equal(false);
       kvEditor.addAt(editor, 1);
+      expect(editor.__machina__.kvEditor.state).to.be.equal('addingAt');
       expect(editor.state.addingAt).to.be.equal(1);
       expect(editor.state.editingOf).to.be.equal(false);
       kvEditor.addAt(editor, Object.keys(kvs1).length);
-      expect(editor.state.addingAt).to.be.equal(1);
+      expect(editor.__machina__.kvEditor.state).to.be.equal('addingAt');
+      expect(editor.state.addingAt).to.be.equal(Object.keys(kvs1).length - 1);
       expect(editor.state.editingOf).to.be.equal(false);
       kvEditor.editOf(editor, 'a');
+      expect(editor.__machina__.kvEditor.state).to.be.equal('editingOf');
       expect(editor.state.addingAt).to.be.equal(false);
       expect(editor.state.editingOf).to.be.equal('a');
       const kvs2 = {
@@ -35,11 +39,26 @@ describe.only('FSMs', () => {
         c: 1
       };
       kvEditor.changeKVs(editor, kvs2);
+      expect(editor.__machina__.kvEditor.state).to.be.equal('addingLast');
       expect(editor.state.addingAt).to.be.equal(1);
       expect(editor.state.editingOf).to.be.equal(false);
+      expect(editor.state.kvs).to.be.eql(kvs2);
       kvEditor.editOf(editor, 'b');
+      expect(editor.__machina__.kvEditor.state).to.be.equal('editingOf');
       expect(editor.state.addingAt).to.be.equal(false);
       expect(editor.state.editingOf).to.be.equal('b');
+      kvEditor.addAt(editor, Object.keys(kvs2).length);
+      expect(editor.__machina__.kvEditor.state).to.be.equal('addingAt');
+      expect(editor.state.addingAt).to.be.equal(Object.keys(kvs2).length - 1);
+      expect(editor.state.editingOf).to.be.equal(false);
+      kvEditor.editOf(editor, 'c');
+      expect(editor.__machina__.kvEditor.state).to.be.equal('editingOf');
+      expect(editor.state.addingAt).to.be.equal(false);
+      expect(editor.state.editingOf).to.be.equal('c');
+      kvEditor.stopEdit(editor);
+      expect(editor.__machina__.kvEditor.state).to.be.equal('addingLast');
+      expect(editor.state.addingAt).to.be.equal(Object.keys(kvs2).length - 1);
+      expect(editor.state.editingOf).to.be.equal(false);
       done();
     });
   });

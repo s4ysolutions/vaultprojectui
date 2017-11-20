@@ -190,7 +190,7 @@ if (ENV === 'dev:static') {
       publicPath: 'http://localhost:8080/'
     },
     cache: true,
-    devtool: 'eval',
+    devtool: 'inline-cheap-module-source-map',
     devServer: {
       publicPath: '/',
       hot: true,

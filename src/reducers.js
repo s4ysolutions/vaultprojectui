@@ -2,7 +2,7 @@ import u from 'update-immutable';
 import { fmsKVsEditor } from './machines';
 import * as A from './actions';
 // eslint-disable-next-line no-console, no-unused-vars
-const _ = (o) => (console.log(o), o);
+const _ = o => (console.log(o), o);
 // [[[ KVs
 const stateKVsEditor = {};
 fmsKVsEditor.changeKVs(stateKVsEditor, {});
@@ -11,7 +11,10 @@ const kvsEditor = (state = stateKVsEditor.state, action) => {
   switch (action.type) {
     case A.VAULT_COMPLETED:
       if (action.action.type === A.VAULT_SECRET_GENERIC_GET) {
-        fmsKVsEditor.changeKVs(stateKVsEditor, action.payload.data.data);
+        fmsKVsEditor.changeKVs(
+          stateKVsEditor,
+          action.payload.data ? action.payload.data.data : {}
+        );
         return stateKVsEditor.state;
       }
       break;
@@ -60,8 +63,18 @@ const messages = (state = initMessages, action) => {
     case A.VAULT_COMPLETED:
       return {
         ...state,
-        errors: action.payload.errors || [],
-        vaultErrors: action.payload.errors || []
+        errors:
+          action.payload.errors &&
+            (action.payload.errors.map
+              ? action.payload.errors
+              : [action.payload.errors]) ||
+          [],
+        vaultErrors:
+          action.payload.errors &&
+            (action.payload.errors.map
+              ? action.payload.errors
+              : [action.payload.errors]) ||
+          []
       };
   }
   return state;
@@ -98,7 +111,10 @@ const vaultState = (state = initVaultState, action) => {
           return {
             ...state,
             isVaultQuerying: false,
-            cache: u(state.cache, { secret: { generic: { folders: { [action.action.path]: { $set: action.payload.data.data.keys } } } } })
+            cache:
+              action.payload.data &&
+                u(state.cache, { secret: { generic: { folders: { [action.action.path]: { $set: action.payload.data.data.keys } } } } }) ||
+              {}
           };
       }
   }

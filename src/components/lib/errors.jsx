@@ -1,24 +1,15 @@
 import React from 'react';
-import { PropTypes } from 'prop-types';
+// import { PropTypes } from 'prop-types';
 import Typography from 'material-ui/Typography';
-import { connect } from 'react-redux';
+import { observer, inject } from 'mobx-react';
 
-const _Errors = ({ errors }) => (
+const Errors = inject('mobx')(observer(({ mobx: { errors } }) =>
   <div>
-    {errors.map((error, i) => (
+    {errors && errors.map((error, i) =>
+      // eslint-disable-next-line react/no-array-index-key
       <Typography key={i} color="accent">
         {error}
-      </Typography>
-    ))}
-  </div>
-);
-
-_Errors.propTypes = {
-  errors: PropTypes.array.isRequired
-};
-
-const Errors = connect(state => ({
-  errors: state.messages.errors
-}))(_Errors);
+      </Typography>)}
+  </div>));
 
 export default Errors;

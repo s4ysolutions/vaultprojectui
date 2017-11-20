@@ -1,49 +1,30 @@
 import React from 'react';
-import { PropTypes } from 'prop-types';
-import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import createMuiTheme from 'material-ui/styles/createMuiTheme';
 import createPalette from 'material-ui/styles/createPalette';
-import { connect } from 'react-redux';
+import { observer, inject } from 'mobx-react';
 
 import Login from './visitor/login';
 import Authentificated from './authentificated';
 
+// eslint-disable-next-line no-console, no-unused-vars
 const _ = o => (console.log(o), o);
 
-const muiTheme = createMuiTheme({
-  palette: createPalette({
-    type: 'light'
-  })
-});
-const ProtectedRoute = ({ isAllowed, ...props }) =>
-  isAllowed ? <Route {...props} /> : <Redirect to="/authentificate" />;
-ProtectedRoute.propTypes = {
-  isAllowed: PropTypes.bool.isRequired,
-  component: PropTypes.func.isRequired
-};
+const muiTheme = createMuiTheme({ palette: createPalette({ type: 'light' }) });
 
-const _App = ({ isTokenVerified }) => (
+const App = inject('mobx')(observer(({ mobx: { vault } }) =>
   <MuiThemeProvider theme={muiTheme}>
     <Switch>
       <Route exact path="/authentificate" component={Login} />
-      <ProtectedRoute
-        isAllowed={isTokenVerified}
-        path="/"
-        component={Authentificated}
-      />
+      {vault.isTokenVerified
+        ? <Authentificated />
+        : <Redirect to="/authentificate" />
+      }
     </Switch>
-  </MuiThemeProvider>
-);
+  </MuiThemeProvider>));
 
-_App.propTypes = {
-  isTokenVerified: PropTypes.bool.isRequired
-};
+// App.propTypes = { vault: PropTypes.object.isRequired };
 
-const App = withRouter(
-  connect(state => ({
-    isTokenVerified: state.vaultState.isTokenVerified
-  }))(_App)
-);
 export default App;

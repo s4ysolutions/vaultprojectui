@@ -10,7 +10,7 @@ import {
   kvCompleteDelete
 } from '../src/actions';
 
-describe.only('Sync Redux', () => {
+describe('Sync Redux', () => {
   let store;
   beforeEach((done) => {
     store = storeFactory();

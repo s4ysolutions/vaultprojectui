@@ -1,8 +1,8 @@
-const { kvEditor } = require('../src/machines');
+const kvEditor = require('../src/machines').fmsKVsEditor;
 
 describe('FSMs', () => {
   describe('KVs editor', () => {
-    it('empty', (done) => {
+    it('empty', done => {
       const editor = {};
       kvEditor.changeKVs(editor, {});
       expect(editor.__machina__.kvEditor.state).to.be.equal('empty');

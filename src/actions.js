@@ -1,42 +1,34 @@
 // eslint-disable-next-line no-console, no-unused-vars
 const _ = o => (console.log(o), o);
-//[[[ Noop
+// [[[ Noop
 export const ACTION_NOOP = 'ACTION_NOOP';
-export const actionNoop = () => ({
-  type: ACTION_NOOP
-});
-//]]]
-//[[[ Transient UI
+export const actionNoop = () => ({ type: ACTION_NOOP });
+// ]]]
+// [[[ Transient UI
 export const UI_DRAWER_OPEN = 'UI_DRAWER_OPEN';
-export const uiDrawerOpen = () => ({
-  type: UI_DRAWER_OPEN
-});
+export const uiDrawerOpen = () => ({ type: UI_DRAWER_OPEN });
 export const UI_DRAWER_CLOSE = 'UI_DRAWER_CLOSE';
-export const uiDrawerClose = () => ({
-  type: UI_DRAWER_CLOSE
-});
-//]]]
-//[[[ Vault
-//[[[ Completed
+export const uiDrawerClose = () => ({ type: UI_DRAWER_CLOSE });
+// ]]]
+// [[[ Vault
+// [[[ Completed
 export const VAULT_COMPLETED = 'VAULT_COMPLETED';
 export const vaultCompleted = (payload, query_action) => ({
   type: VAULT_COMPLETED,
   payload,
   action: query_action
 });
-//]]]
-//[[[ URL
+// ]]]
+// [[[ URL
 export const VAULT_SET_URL = 'VAULT_SET_URL';
 export const vaultSetURL = url => ({
   type: VAULT_SET_URL,
   url
 });
-//]]]
-//[[[ Auth
+// ]]]
+// [[[ Auth
 export const VAULT_EXIT = 'VAULT_EXIT';
-export const vaultExit = () => ({
-  type: VAULT_EXIT
-});
+export const vaultExit = () => ({ type: VAULT_EXIT });
 
 export const VAULT_AUTH_SET_TOKEN = 'VAULT_AUTH_SET_TOKEN';
 export const vaultAuthSetToken = token => ({
@@ -49,18 +41,18 @@ export const vaultAuthLookupSelf = (alwaysOrSuccess, fail) => ({
   type: VAULT_AUTH_LOOKUP_SELF,
   always: !fail && alwaysOrSuccess,
   success: fail && alwaysOrSuccess,
-  fail: fail
+  fail
 });
-//]]]
-//[[[ Secret
-//[[[ Generic
+// ]]]
+// [[[ Secret
+// [[[ Generic
 export const VAULT_SECRET_GENERIC_LIST = 'VAULT_SECRET_GENERIC_LIST';
 export const vaultSecretGenericList = (path, alwaysOrSuccess, fail) => ({
   type: VAULT_SECRET_GENERIC_LIST,
   path,
   always: !fail && alwaysOrSuccess,
   success: fail && alwaysOrSuccess,
-  fail: fail
+  fail
 });
 export const VAULT_SECRET_GENERIC_GET = 'VAULT_SECRET_GENERIC_GET';
 export const vaultSecretGenericGet = (path, alwaysOrSuccess, fail) => ({
@@ -68,7 +60,7 @@ export const vaultSecretGenericGet = (path, alwaysOrSuccess, fail) => ({
   path,
   always: !fail && alwaysOrSuccess,
   success: fail && alwaysOrSuccess,
-  fail: fail
+  fail
 });
 export const VAULT_SECRET_GENERIC_PUT = 'VAULT_SECRET_GENERIC_PUT';
 export const vaultSecretGenericPut = (path, kvs, alwaysOrSuccess, fail) => ({
@@ -77,12 +69,12 @@ export const vaultSecretGenericPut = (path, kvs, alwaysOrSuccess, fail) => ({
   kvs,
   always: !fail && alwaysOrSuccess,
   success: fail && alwaysOrSuccess,
-  fail: fail
+  fail
 });
-//]]]
-//]]]
-//]]]
-//[[[ KVs
+// ]]]
+// ]]]
+// ]]]
+// [[[ KVs
 export const KV_START_ADD_AT = 'KV_START_ADD_AT';
 export const kvStartAddAt = pos => ({
   type: KV_START_ADD_AT,
@@ -101,13 +93,10 @@ export const kvDeleteOf = key => ({
   key
 });
 
-export const KV_CANCEL_ADD = 'KV_CANCEL_ADD';
-export const kvCancelAdd = () => ({
-  type: KV_CANCEL_ADD
+export const KV_SUBMIT_GENERIC = 'KV_SUBMIT_GENERIC';
+export const kvSubmitGeneric = (path, kvs) => ({
+  type: KV_SUBMIT_GENERIC,
+  path,
+  kvs
 });
-
-export const KV_COMPLETE_EDIT = 'KV_COMPLETE_EDIT';
-export const kvCompleteEdit = () => ({
-  type: KV_COMPLETE_EDIT
-});
-//]]]
+// ]]]
